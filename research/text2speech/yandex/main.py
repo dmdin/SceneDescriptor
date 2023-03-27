@@ -1,4 +1,5 @@
 import os
+import pathlib
 from datetime import datetime
 
 import argparse
@@ -46,8 +47,9 @@ def send_to_api(text, speed, voice):
             yield chunk
 
 
-def text2speech(text, *_, speed=3.0, voice=Voice.Filipp):
-    out_path = datetime.now()
+def text2speech(text, *_, speed=3.0, voice=Voice.Filipp, out_dir='./'):
+    out_path = pathlib.Path(out_dir, f'{str(datetime.now().timestamp() * 1000).split(".")[0]}.mp3')
+    voice = voice.value
 
     with open(out_path, "wb") as f:
         for audio_content in send_to_api(text, speed, voice):
@@ -55,7 +57,9 @@ def text2speech(text, *_, speed=3.0, voice=Voice.Filipp):
     return out_path
 
 
-def setup_text2speech(*, speed, voice: Voice):
-    def wrap(text: str, out_path: str):
-        return text2speech(text, speed=speed, voice=voice)
+def setup_text2speech(*, speed, voice: Voice, out_dir='./'):
+    pathlib.Path(out_dir).mkdir(parents=True, exist_ok=True)
+
+    def wrap(text: str):
+        return text2speech(text, speed=speed, voice=voice, out_dir=out_dir)
     return wrap

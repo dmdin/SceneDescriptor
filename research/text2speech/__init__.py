@@ -1,2 +1,1 @@
-from speedup import speedup
-from yandex import text2speech, Voice
+from .yandex import text2speech, Voice, setup_text2speech

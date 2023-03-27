@@ -1,1 +1,1 @@
-from main import text2speech, Voice
+from .main import *
