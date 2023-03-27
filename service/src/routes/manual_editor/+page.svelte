@@ -7,18 +7,6 @@
 
 	onMount(async() => {
 		WaveSurfer = (await import('wavesurfer.js')).default;
-		// $wavesurfer = WaveSurfer.create({
-    //   container: '#waveform',
-    //   waveColor: 'rgb(38, 126, 97)',
-    //   progressColor: 'rgb(77, 189, 152)',
-    //   interact: false,
-    //   height: 50,
-    //   responsive: true,
-    //   hideScrollbar: true,
-    //   backend: 'MediaElement'
-    // });
-		// // console.log(WaveSurfer);
-		// $wavesurfer.load('https://sveltejs.github.io/assets/caminandes-llamigos.mp4');
 	})
 	// let point_list: any[] = ["25", "6" ];
 	// let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };
@@ -28,6 +16,16 @@
 
 // set video
 let set_file: any = null;
+
+let for_audio: any;
+$:for_audio = file_check(set_file);
+
+function file_check(file: any){
+	if(set_file !== null){
+		setTimeout(create_audio, 1000);
+	}
+}
+
 function create_audio(){
 		$wavesurfer = WaveSurfer.create({
       container: '#waveform',
@@ -40,8 +38,8 @@ function create_audio(){
       backend: 'MediaElement'
     });
 		// console.log(WaveSurfer);
-		$wavesurfer.load('https://sveltejs.github.io/assets/caminandes-llamigos.mp4');
-		// $wavesurfer.load(window.URL.createObjectURL(set_file[0]));
+		// $wavesurfer.load('https://sveltejs.github.io/assets/caminandes-llamigos.mp4');
+		$wavesurfer.load(window.URL.createObjectURL(set_file[0]));
 		
 }
 // управление видео
@@ -90,7 +88,6 @@ function create_audio(){
 // audio
 	let recording_state = false;
 	let mediaRecorder: any;
-  let audio_blob: any = null;
 	
 	function start_recording(time){
     recording_state = true;
@@ -124,7 +121,7 @@ function create_audio(){
 </script>
 
 <div class="">
-	{#if set_file}
+	{#if !set_file}
 		<div class="h-48 w-80 flex flex-col shadow-xl rounded-xl m-auto mt-40">
 			<input accept=".mov, .mp4" hidden id="files" type="file" bind:files={set_file}>
 			<p class="text-center text-gray-600 mt-8">Выберете файл для дальнейшего редактирования</p>
@@ -146,19 +143,17 @@ function create_audio(){
 				bind:duration
 				bind:paused
 			>
-				<!-- <source src={window.URL.createObjectURL(set_file[0])}> -->
-					<source src={"https://sveltejs.github.io/assets/caminandes-llamigos.mp4"}>
+				<source src={window.URL.createObjectURL(set_file[0])}>
+					<!-- <source src={"https://sveltejs.github.io/assets/caminandes-llamigos.mp4"}> -->
 				<track kind="captions">
 			</video>
 
 			<div class="p-2 flex flex-col shadow-xl rounded-lg">
 				<div class="flex">
-					<button class="bg-red-400 hover:bg-red-300 w-12 h-12 ml-2 rounded-xl" on:click={() => {set_file = null; time_now = 0;}}>
-						<svg width="16" height="16" class="m-auto" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M0.472396 0.472518C0.758152 0.186848 1.14567 0.0263672 1.54973 0.0263672C1.95379 0.0263672 2.34131 0.186848 2.62706 0.472518L8.01525 5.86071L13.4034 0.472518C13.6908 0.194944 14.0758 0.0413523 14.4753 0.0448241C14.8748 0.048296 15.257 0.208553 15.5395 0.49108C15.8221 0.773607 15.9823 1.1558 15.9858 1.55534C15.9893 1.95487 15.8357 2.33979 15.5581 2.62718L10.1699 8.01537L15.5581 13.4036C15.8357 13.691 15.9893 14.0759 15.9858 14.4754C15.9823 14.875 15.8221 15.2571 15.5395 15.5397C15.257 15.8222 14.8748 15.9825 14.4753 15.9859C14.0758 15.9894 13.6908 15.8358 13.4034 15.5582L8.01525 10.17L2.62706 15.5582C2.33967 15.8358 1.95475 15.9894 1.55521 15.9859C1.15568 15.9825 0.773485 15.8222 0.490958 15.5397C0.208431 15.2571 0.048174 14.875 0.0447021 14.4754C0.0412302 14.0759 0.194822 13.691 0.472396 13.4036L5.86059 8.01537L0.472396 2.62718C0.186726 2.34143 0.0262451 1.95391 0.0262451 1.54985C0.0262451 1.14579 0.186726 0.758274 0.472396 0.472518Z" fill="#ffffff"/>
-						</svg>
+					<button class="bg-red-400 hover:bg-red-300 text-sm mr-2 px-1 whitespace-nowrap text-white rounded-xl" on:click={() => {set_file = null; time_now = 0;}}>
+						Удалить проект
 					</button>
-					<button on:click={create_audio} class="btn-blue mx-1 my-1">сгенерить аудио</button>
+					<!-- <button on:click={create_audio} class="btn-blue mx-1 my-1">сгенерить аудио</button> -->
 					{#if paused}
 						<button class="btn-blue" on:click={() => {paused=false}}>play</button>
 					{:else}
