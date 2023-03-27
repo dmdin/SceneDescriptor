@@ -5,10 +5,17 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 from pipeline import pipeline
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.mount("/voices", StaticFiles(directory="voices"), name="voices")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ImageUrl(BaseModel):
     url: str
