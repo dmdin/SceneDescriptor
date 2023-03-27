@@ -108,3 +108,10 @@ button:focus:not(:focus-visible) {
 	width: 1px;
 	white-space: nowrap;
 }
+
+
+
+
+.btn-blue{
+	@apply bg-blue-500 hover:bg-blue-400 rounded-xl p-2 text-sm text-white;
+}
