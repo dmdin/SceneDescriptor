@@ -1,23 +1,41 @@
 import os
+from datetime import datetime
 
 import argparse
 import requests
+import enum
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
+IAM_TOKEN = os.environ['IAM_TOKEN']
+FOLDER_ID = os.environ['FOLDER_ID']
 
-def synthesize(folder_id, iam_token, text):
+
+class Voice(enum.Enum):
+    Alena='alena'
+    Filipp='filipp'
+    Ermil='ermil'
+    Jane='jane'
+    Madirus='madirus'
+    Omazh='omazh'
+    Zahar='zahar'
+
+
+def send_to_api(text, speed, voice):
     url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
     headers = {
-        'Authorization': 'Bearer ' + iam_token,
+        'Authorization': 'Bearer ' + IAM_TOKEN,
     }
 
     data = {
         'text': text,
+        'speed': speed,
+        'voice': voice,
+        'folderId': FOLDER_ID,
         'lang': 'ru-RU',
-        'voice': 'filipp',
-        'folderId': folder_id,
+        'format': 'mp3'
     }
 
     with requests.post(url, headers=headers, data=data, stream=True) as resp:
@@ -28,14 +46,16 @@ def synthesize(folder_id, iam_token, text):
             yield chunk
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    # parser.add_argument("--token", required=True, help="IAM token")
-    # parser.add_argument("--folder_id", required=True, help="Folder id")
-    parser.add_argument("--text", required=True, help="Text for synthesize")
-    parser.add_argument("--output", required=True, help="Output file name")
-    args = parser.parse_args()
+def text2speech(text, *_, speed=3.0, voice=Voice.Filipp):
+    out_path = datetime.now()
 
-    with open(args.output, "wb") as f:
-        for audio_content in synthesize(os.environ['FOLDER_ID'], os.environ['IAM_TOKEN'], args.text):
+    with open(out_path, "wb") as f:
+        for audio_content in send_to_api(text, speed, voice):
             f.write(audio_content)
+    return out_path
+
+
+def setup_text2speech(*, speed, voice: Voice):
+    def wrap(text: str, out_path: str):
+        return text2speech(text, speed=speed, voice=voice)
+    return wrap
