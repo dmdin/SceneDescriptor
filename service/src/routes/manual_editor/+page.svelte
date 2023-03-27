@@ -1,15 +1,50 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+	import {writable} from "svelte/store";
 
-	let set_file: any = null;
+	const wavesurfer: any = writable()
+	let WaveSurfer: any;
 
+	onMount(async() => {
+		WaveSurfer = (await import('wavesurfer.js')).default;
+		// $wavesurfer = WaveSurfer.create({
+    //   container: '#waveform',
+    //   waveColor: 'rgb(38, 126, 97)',
+    //   progressColor: 'rgb(77, 189, 152)',
+    //   interact: false,
+    //   height: 50,
+    //   responsive: true,
+    //   hideScrollbar: true,
+    //   backend: 'MediaElement'
+    // });
+		// // console.log(WaveSurfer);
+		// $wavesurfer.load('https://sveltejs.github.io/assets/caminandes-llamigos.mp4');
+	})
 	// let point_list: any[] = ["25", "6" ];
 	// let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };
 
 	let point_list: any[] = [];
 	let point_voc: any = {};
 
-
-	// управление видео
+// set video
+let set_file: any = null;
+function create_audio(){
+		$wavesurfer = WaveSurfer.create({
+      container: '#waveform',
+      waveColor: 'rgb(38, 126, 97)',
+      progressColor: 'rgb(77, 189, 152)',
+      interact: false,
+      height: 50,
+      responsive: true,
+      hideScrollbar: true,
+      backend: 'MediaElement'
+    });
+		// console.log(WaveSurfer);
+		// $wavesurfer.load('https://sveltejs.github.io/assets/caminandes-llamigos.mp4');
+		$wavesurfer.load(window.URL.createObjectURL(set_file[0]));
+		
+}
+// управление видео
 	let time_now = 0;
 	let duration: any;
 	let paused = true;
@@ -45,14 +80,14 @@
 		return `${minutes}:${seconds}`;
 	}
 
-	// поинты
+// поинты
 	function new_poin(time: any){
 		point_voc[time - (time % 1)] = {name: "test_name", audio_blob: null};
 		point_list.push(time - (time % 1));
 		point_list = point_list;
 	}
 
-	// audio
+// audio
 	let recording_state = false;
 	let mediaRecorder: any;
   let audio_blob: any = null;
@@ -92,9 +127,10 @@
 
 <!-- <button class="btn-blue" on:click={() => {console.log(point_voc)}}>point_voc</button> -->
 
+<!-- <div id="waveform"></div> -->
 
 <div class="flex mb-2">
-	<input accept=".mov, .mp4" hidden id="files" type="file" bind:files={set_file}>
+	<input accept=".mov, .mp4" hidden id="files" type="file" bind:files={set_file} bi>
 
 	<label for="files">
 		<svg width="18" height="18" class="w-12 h-12 cursor-pointer" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +150,7 @@
 </div>
 
 
-{#if set_file && set_file[0] || true}
+{#if set_file && set_file[0]}
 	<div class="flex flex-col 1bg-green-100">
 		<video style=" 
 			object-fit:contain;
@@ -128,12 +164,13 @@
 			bind:duration
 			bind:paused
 		>
-			<source src={"https://sveltejs.github.io/assets/caminandes-llamigos.mp4"}>
-			<!-- <source src={window.URL.createObjectURL(set_file[0])}> -->
+			<!-- <source src={"https://sveltejs.github.io/assets/caminandes-llamigos.mp4"}> -->
+			<source src={window.URL.createObjectURL(set_file[0])}>
 				
 			<track kind="captions">
 		</video>
 
+		<button on:click={create_audio} class="btn-blue mx-auto my-1">сгенерить аудио</button>
 		<p class="text-center my-1">{format(time_now)} / {format(duration)}</p>
 
 		<div class="flex px-4 text-lg">
@@ -149,6 +186,8 @@
 				{/each}
 			</div>
 		</div>
+
+		<div class="mx-8" id="waveform"></div>
 
 		{#if paused}
 			{#if point_voc[time_now - (time_now % 1)]}
