@@ -4,10 +4,12 @@ from dotenv import load_dotenv
 import subprocess
 import datetime
 import time
+import cv2
 import os
 
 load_dotenv()
 AUTH_TOKEN = os.environ['AUTH_TOKEN']
+SAVING_FRAMES_PER_SECOND = 10
 
 
 def get_time_seconds(time_str):
@@ -67,4 +69,32 @@ def get_scenes_with_silence(filepath, scene_thr, span_thr, voice_thr):
     return scenes_with_silence
 
 
-print(get_scenes_with_silence('./data/matrix.mp4', 4, 4, 3))
+def get_scenes_frames(filepath, scene_thr, span_thr, voice_thr, frames_dir='./data/frames'):
+    scenes = get_scenes_with_silence(filepath, scene_thr, span_thr, voice_thr)
+    print('got scenes with silence')
+
+    cap = cv2.VideoCapture(filepath)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    saving_frames_per_second = min(fps, SAVING_FRAMES_PER_SECOND)
+    current_scene_ind = 0
+    frame_ind = 0
+    scenes_info = []
+    while True:
+        is_read, frame = cap.read()
+        if not is_read:
+            break
+        frame_time = frame_ind / fps
+        if frame_time >= scenes[current_scene_ind][0]:
+            cv2.imwrite(f'{frames_dir}/frame_{current_scene_ind}.jpg', frame)
+            print(f'frame for scene {current_scene_ind} saved as {frames_dir}/frame_{current_scene_ind}.jpg')
+            print(frame_time)
+            scenes_info.append({'scene': scenes[current_scene_ind], 'frame': f'{frames_dir}/frame_{current_scene_ind}.jpg'})
+            if current_scene_ind >= len(scenes) - 1:
+                break
+            current_scene_ind += 1
+        frame_ind += 1
+
+    return scenes_info
+
+
+# print(get_scenes_frames('./data/matrix.mp4', 4, 4, 3))

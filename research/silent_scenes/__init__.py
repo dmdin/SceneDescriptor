@@ -1,1 +1,1 @@
-from main import get_scenes_with_silence
+from main import get_scenes_frames
