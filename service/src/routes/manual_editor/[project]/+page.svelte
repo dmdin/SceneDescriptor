@@ -125,6 +125,13 @@
       }
     }
   }
+
+  async function generatePoints() {
+      let newPoints = await fetch(new URL(`/description/${projectId}`, CUTTER_URL)).then(r => r.json())
+      newPoints.scenes_info.forEach(point => {
+          new_point(point.scene[0])
+      })
+  }
 </script>
 
 <canvas hidden id="capture-canvas" style="overflow:auto"></canvas>
@@ -165,6 +172,7 @@
             <button
               title="Сгенерировать маркеры"
               class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3"
+              on:click={generatePoints}
             >
               <Bolt size="20"/>
             </button>

@@ -65,7 +65,7 @@ def get_scenes_with_silence(filepath, scene_thr, span_thr, voice_thr):
             current_scene = scenes[scene_ind]
             if current_scene[1] - span[0] >= voice_thr and current_scene[1] < span[1] or \
                     span[1] - current_scene[0] >= voice_thr and current_scene[0] > span[0]:
-                scenes_with_silence.append(current_scene)
+                scenes_with_silence.append((max(current_scene[0], span[0]), min(current_scene[1], span[1])))
     return scenes_with_silence
 
 
