@@ -4,6 +4,7 @@ import requests
 from yarl import URL
 import json
 import uvicorn
+from typing import List
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
@@ -27,42 +28,48 @@ app.add_middleware(
 app.mount("/projects", StaticFiles(directory=PROJECTS_DIR), name="projects")
 
 
-class VideoId(BaseModel):
+class Project(BaseModel):
+    video_id: str
+    name: str
+
+
+class Frame(BaseModel):
+    scene: str
+    dubbing: str
+    description: str
+    frame: str
+
+
+class VideoDescription(BaseModel):
     id: str
-
-
-def get_dubbing(frame_path):
-    # TODO
-    # res = requests.post(f'{DUBBING_APP_URL}/image_to_voice', json={'url': frame_path})
-    # return res.text
-    return ''
+    name: str
+    scenes_info: List[Frame]
 
 
 @app.post('/generate_description')
-def generate_description_by_id(body: VideoId):
-    project_dir = pathlib.Path(PROJECTS_DIR) / body.id
+def generate_description_by_id(body: Project):
+    project_dir = pathlib.Path(PROJECTS_DIR) / body.video_id
     (project_dir / 'frames').mkdir(parents=True, exist_ok=True)
 
-    scenes_frames = get_scenes_frames(f'{PROJECTS_DIR}/{body.id}/video.mp4', 4, 4, 3,
-                                      f'{PROJECTS_DIR}/{body.id}/frames')
+    scenes_frames = get_scenes_frames(f'{PROJECTS_DIR}/{body.video_id}/video.mp4', 4, 4, 3,
+                                      f'{PROJECTS_DIR}/{body.video_id}/frames')
 
-    descriptions = []
+    description = {'id': body.video_id, 'name': body.name, 'scenes_info': []}
 
     for scene_info in scenes_frames:
-        dubbing_path = get_dubbing(scene_info['frame'])
-        descriptions.append({
+        description['scenes_info'].append({
             'scene': scene_info['scene'],
             'dubbing': '',
             'description': '',
             'frame': str(BASE_URL / scene_info['frame'])})
 
-    with open(f'{PROJECTS_DIR}/{body.id}/description.json', 'w') as file:
-        json.dump(descriptions, file)
+    with open(f'{PROJECTS_DIR}/{body.video_id}/description.json', 'w') as file:
+        json.dump(description, file)
 
-    return descriptions
+    return description
 
 
-@app.get('/description')
+@app.get('/description/{video_id}')
 def get_description_by_id(video_id: int):
     with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'r') as file:
         data = json.load(file)
@@ -70,13 +77,25 @@ def get_description_by_id(video_id: int):
     return data
 
 
+@app.put('/description/{video_id}')
+def update_description(video_id: int, new_description: VideoDescription):
+    print(video_id)
+    with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'w') as file:
+        json.dump(new_description.dict(), file)
+
+    return new_description
+
+
 @app.get('/get_all_projects')
 def get_all_projects():
     projects = os.listdir(PROJECTS_DIR)
 
     res = []
-    for project_name in projects:
-        project_url = BASE_URL / 'projects' / project_name
+    for project_id in projects:
+        project_url = BASE_URL / 'projects' / project_id
+
+        with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'r') as file:
+            description = json.load(file)
 
         res.append({
             'video': str(project_url / 'video.mp4'),
