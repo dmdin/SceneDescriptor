@@ -13,7 +13,7 @@ from silent_scenes.main import get_scenes_frames
 
 DUBBING_APP_URL = 'http://localhost:8000'
 PROJECTS_DIR = 'static/videos'
-BASE_URL = 'http://localhost:8081'
+BASE_URL = URL('http://localhost:8081')
 
 
 app = FastAPI()
@@ -50,7 +50,11 @@ def generate_description_by_id(body: VideoId):
 
     for scene_info in scenes_frames:
         dubbing_path = get_dubbing(scene_info['frame'])
-        descriptions.append({'scene': scene_info['scene'], 'dubbing': '', 'description': '', 'frame': scene_info['frame']})
+        descriptions.append({
+            'scene': scene_info['scene'],
+            'dubbing': '',
+            'description': '',
+            'frame': str(BASE_URL / scene_info['frame'])})
 
     with open(f'{PROJECTS_DIR}/{body.id}/description.json', 'w') as file:
         json.dump(descriptions, file)
@@ -72,7 +76,7 @@ def get_all_projects():
 
     res = []
     for project_name in projects:
-        project_url = URL(BASE_URL) / 'projects' / project_name
+        project_url = BASE_URL / 'projects' / project_name
 
         res.append({
             'video': str(project_url / 'video.mp4'),
