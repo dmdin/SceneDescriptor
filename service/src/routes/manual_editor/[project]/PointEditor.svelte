@@ -7,7 +7,7 @@
 </script>
 
 
-<div class="border border-gray-800 p-3 rounded-lg flex flex-col  h-full">
+<div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full">
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
   <div class="flex flex-col">
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
@@ -46,7 +46,7 @@
     </button>
   </div>
   <hr class="border-gray-800 mt-2">
-  <div class="w-full text-gray-500 text-sm flex justify-between items-center">
+  <div class="w-full text-gray-500 text-sm flex justify-between items-end flex-1">
     <p class="mr-1 my-2">Удалить отметку:</p>
     <button title="Сгенерировать текст" class="transition transition-color hover:text-red-600 ">
       <Trash size="20"/>
