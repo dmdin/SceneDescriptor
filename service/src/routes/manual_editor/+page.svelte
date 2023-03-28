@@ -79,12 +79,21 @@ function create_audio(){
 	}
 
 // поинты
-	function new_poin(time: any){
-		point_voc[time - (time % 1)] = {name: "test_name", audio_blob: null};
-		point_list.push(time - (time % 1));
+	function new_point(time: any){
+		let time_sec = time - (time % 1);
+		point_voc[time_sec] = {name: "test_name", audio_blob: null};
+		point_list.push(time_sec);
 		point_list = point_list;
 	}
-
+	function delete_point(time: any){
+		let time_sec = time - (time % 1);
+		delete point_voc[time_sec];
+		let new_list: any[] = [];
+		point_list.forEach(point => {
+			if(point !== time_sec) new_list.push(point);
+		})
+		point_list = new_list;
+	}
 // audio
 	let recording_state = false;
 	let mediaRecorder: any;
@@ -171,6 +180,7 @@ function create_audio(){
 							<p class="mr-1 text-gray-600 text-sm my-auto">Название - </p>
 							<input class="p-0.5 rounded-lg" type="text" bind:value={point_voc[time_now - (time_now % 1)].name}>
 						</div>
+						<p on:click={() => delete_point(time_now)} class="text-xs text-red-500 hover:text-red-400 cursor-pointer">Удалить отметку</p>
 
 
 						{#if point_voc[time_now - (time_now % 1)].audio_blob !== null}
@@ -194,7 +204,7 @@ function create_audio(){
 
 					</div>
 				{:else}
-					<button on:click={() => new_poin(time_now)} class="btn-blue mt-2 mx-auto">Создать отметку(?)</button>
+					<button on:click={() => new_point(time_now)} class="btn-blue mt-2 mx-auto">Создать отметку(?)</button>
 				{/if}
 			</div>
 		</div>
