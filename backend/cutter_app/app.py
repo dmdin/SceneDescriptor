@@ -13,7 +13,7 @@ from silent_scenes.main import get_scenes_frames
 
 DUBBING_APP_URL = 'http://localhost:8000'
 PROJECTS_DIR = 'static/videos'
-BASE_URL = URL('http://localhost:8081')
+BASE_URL = URL('http://localhost:8001')
 
 
 app = FastAPI()
