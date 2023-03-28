@@ -110,6 +110,7 @@ def get_all_projects():
             description = json.load(file)
 
         res.append({
+            'name': description['name'],
             'video': str(project_url / 'video.mp4'),
             'description': str(project_url / 'description.json'),
             'preview': str(project_url / 'frames' / 'frame_0.jpg'),
