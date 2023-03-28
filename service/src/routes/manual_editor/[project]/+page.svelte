@@ -20,7 +20,6 @@
   onMount(async () => {
     WaveSurfer = (await import('wavesurfer.js')).default;
     description = await fetch(descrUrl).then(r => r.json())
-
   })
   // let point_list: any[] = ["25", "6" ];
   // let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };

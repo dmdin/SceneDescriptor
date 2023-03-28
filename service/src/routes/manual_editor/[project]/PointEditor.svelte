@@ -1,11 +1,20 @@
 <script lang="ts">
-  import {Trash, Microphone, Stop, Bolt} from 'svelte-heros-v2'
-
+  import {Trash, Microphone, Stop, Bolt, Play, Pause} from 'svelte-heros-v2'
+  import Recorder from "./Recorder.svelte";
   export let description
   export let time
 
-</script>
+  export let pointData;
 
+
+  // audi
+
+
+  function generateText2Speech() {
+    // if (description)
+  }
+
+</script>
 
 <div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full max-w-[260px]">
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
@@ -37,17 +46,14 @@
         <Bolt size="20"/>
       </button>
     </div>
-    <button class="transition transition-color hover:text-red-600 cursor-pointer text-gray-600">
-      <Microphone/>
-    </button>
-    <button class="transition transition-color hover:text-red-600 cursor-pointer text-gray-600"
-            on:click={() => console.log(2)}>
-      <Stop/>
-    </button>
+    <Recorder/>
   </div>
+
+
+
   <hr class="border-gray-800 mt-2">
   <div class="w-full text-gray-500 text-sm flex justify-between items-end flex-1">
-    <p class="mr-1 my-2">Удалить маркер:</p>
+    <p class="mr-1">Удалить маркер:</p>
     <button title="Сгенерировать текст" class="transition transition-color hover:text-red-600 ">
       <Trash size="20"/>
     </button>

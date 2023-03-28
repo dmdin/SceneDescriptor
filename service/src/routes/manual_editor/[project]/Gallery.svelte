@@ -12,10 +12,10 @@
 </script>
 
 <div class="border border-gray-800 p-3 rounded-lg flex flex-col max-w-[260px] h-full">
-  <p class="text-md text-gray-400 font-bold mb-2">Галлерея проектов</p>
+  <p class="text-md text-gray-400 font-bold mb-2">Галерея проектов</p>
   <div class="flex flex-col items-center overflow-y-auto">
     {#each projects as project}
-      <ProjectCard {...project}/>
+      <ProjectCard {...project} textCls="text-sm"/>
     {/each}
   </div>
 </div>
