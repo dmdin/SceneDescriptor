@@ -126,9 +126,31 @@ function create_audio(){
     mediaRecorder.stop();
     recording_state = false;
   }
-
+// просмотр с заметками
+let state_show_video = false;
+function start_video(){
+	state_show_video = true;
+	time_now = 0;
+	paused = false;
+	new_list = {};
+}
+let for_audio_checked;
+$: for_audio_checked = check_audio(time_now);
+let new_list: any = {};
+function check_audio(time: any){
+	let time_sec = time - (time % 1);
+	if(point_voc[time_sec] !== undefined && !new_list[time_sec]){
+		console.log("Запуск аудиозаписи " + time_sec);
+		new_list[time_sec] = true
+		if(state_show_video){
+			document.getElementById("hid_audio").src = URL.createObjectURL(point_voc[time_sec].audio_blob);
+			document.getElementById("hid_audio").play();
+			
+		}
+	}
+}
 </script>
-
+<audio hidden id="hid_audio" src='' controls></audio>
 <div class="">
 	{#if !set_file}
 		<div class="h-48 w-80 flex flex-col shadow-xl rounded-xl m-auto mt-40">
@@ -170,7 +192,7 @@ function create_audio(){
 					{/if}
 				</div>
 
-
+				<button class="btn-blue mt-1" on:click={start_video}>Запустить видео с заметками</button>
 				
 				
 				{#if point_voc[time_now - (time_now % 1)]}
