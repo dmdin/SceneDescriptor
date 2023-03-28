@@ -3,7 +3,6 @@ export async function getPCM2(blob, audioCtx) {
   const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
   const analyser = audioCtx.createAnalyser();
 
-
   const source = audioCtx.createBufferSource();
 
   source.buffer = audioBuffer;

@@ -134,7 +134,6 @@
   }
 </script>
 
-<canvas hidden id="capture-canvas" style="overflow:auto"></canvas>
 <audio hidden id="hid_audio" src='' controls></audio>
 <div class="h-screen">
   <div class="flex p-5 gap-3 h-fit">

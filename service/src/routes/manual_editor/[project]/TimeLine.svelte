@@ -34,7 +34,7 @@
 {/if}
 
 {#if audioData}
-  <WaveForm data={audioData} width={containerWidth}/>
+  <WaveForm data={audioData} width={containerWidth} height="150"/>
 {/if}
 
 </div>

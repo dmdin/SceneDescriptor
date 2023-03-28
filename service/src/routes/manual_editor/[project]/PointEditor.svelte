@@ -1,20 +1,36 @@
 <script lang="ts">
   import {Trash, Microphone, Stop, Bolt, Play, Pause} from 'svelte-heros-v2'
   import Recorder from "./Recorder.svelte";
+  import {capture} from "./frame";
+
   export let description
   export let time
 
   export let pointData;
 
+  async function generateText() {
+    const video = document.getElementById("video-main") as HTMLVideoElement;
 
-  // audi
+    function capture() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d")
+      if (!ctx) return
+      ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
+      img.src = canvas.toDataURL("image/png");
+    }
+    capture()
 
-  function generateText2Speech() {
-    // if (description)
+    console.log(canvas.toDataURL('image/png'))
   }
 
+  let canvas, img
 </script>
+
+
+<img bind:this={img}>
+<canvas bind:this={canvas} hidden></canvas>
 
 <div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full max-w-[260px]">
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
@@ -25,7 +41,10 @@
     </div>
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Текст маркера:</p>
-      <button title="Сгенерировать текст" class="transition transition-color hover:text-yellow-400">
+      <button
+        title="Сгенерировать текст" class="transition transition-color hover:text-yellow-400"
+        on:click={generateText}
+      >
         <Bolt size="20"/>
       </button>
     </div>
