@@ -69,32 +69,38 @@ def get_scenes_with_silence(filepath, scene_thr, span_thr, voice_thr):
     return scenes_with_silence
 
 
-def get_scenes_frames(filepath, scene_thr, span_thr, voice_thr, frames_dir='./data/frames'):
+def get_scenes_frames(filepath, scene_thr, span_thr, voice_thr, timeline_dir, frames_dir='./data/frames'):
     scenes = get_scenes_with_silence(filepath, scene_thr, span_thr, voice_thr)
     print('got scenes with silence')
 
     cap = cv2.VideoCapture(filepath)
     fps = cap.get(cv2.CAP_PROP_FPS)
-    saving_frames_per_second = min(fps, SAVING_FRAMES_PER_SECOND)
+    frames_number = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     current_scene_ind = 0
+    timeline_frame_ind = 1
     frame_ind = 0
+    timeline = []
     scenes_info = []
     while True:
         is_read, frame = cap.read()
         if not is_read:
             break
+
+        if frame_ind == timeline_frame_ind * frames_number // 11:
+            cv2.imwrite(f'{timeline_dir}/frame_{timeline_frame_ind}.jpg', frame)
+            timeline.append(f'{timeline_dir}/frame_{timeline_frame_ind}.jpg')
+            timeline_frame_ind += 1
+
         frame_time = frame_ind / fps
-        if frame_time >= scenes[current_scene_ind][0]:
+        if current_scene_ind < len(scenes) and frame_time >= scenes[current_scene_ind][0]:
             cv2.imwrite(f'{frames_dir}/frame_{current_scene_ind}.jpg', frame)
             print(f'frame for scene {current_scene_ind} saved as {frames_dir}/frame_{current_scene_ind}.jpg')
-            print(frame_time)
             scenes_info.append({'scene': scenes[current_scene_ind], 'frame': f'{frames_dir}/frame_{current_scene_ind}.jpg'})
-            if current_scene_ind >= len(scenes) - 1:
-                break
+
             current_scene_ind += 1
         frame_ind += 1
 
-    return scenes_info
+    return scenes_info, timeline
 
 
 # print(get_scenes_frames('./data/matrix.mp4', 4, 4, 3))

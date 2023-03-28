@@ -4,6 +4,7 @@
   import {page} from '$app/stores';
   import {CUTTER_URL} from "$lib/constants";
   import PointEditor from "./PointEditor.svelte";
+  import TimeLine from "./TimeLine.svelte";
   import Gallery from "./Gallery.svelte";
   import {Play, Pause, Microphone, Bookmark, Bolt} from 'svelte-heros-v2'
 
@@ -264,11 +265,12 @@
       <!--{:else}-->
       <!--  <button on:click={() => new_point(time_now)} class="btn-blue mt-2 mx-auto">Создать отметку(?)</button>-->
       <!--{/if}-->
+    </div>
   </div>
 
 
   <div class="flex flex-col shadow-xl mt-2 pb-2 rounded-lg">
-    <div class="flex px-4 text-lg">
+    <div class="flex px-4 text-lg flex-wrap">
       <div class="w-full mx-4 my-auto bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 cursor-pointer"
            on:mousemove={handleMove}
            on:touchmove|preventDefault={handleMove}
@@ -276,7 +278,9 @@
            on:mouseup={handleMouseup}>
         <div class="bg-orange-600 h-2.5" style={"width: " + ((time_now / duration) * 100) + "%;"}></div>
       </div>
+      <TimeLine description={description} projectId={projectId}/>
     </div>
+
 
     <div class="flex px-4 mt-1 mb-4 text-lg bg-blue-100">
       <div class="flex mx-4 w-full relative bg-green-100 ">
@@ -296,4 +300,3 @@
     <!-- {/if} -->
 
   </div>
-</div>

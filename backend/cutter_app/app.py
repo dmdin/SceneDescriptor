@@ -49,18 +49,21 @@ class VideoDescription(BaseModel):
 def generate_description(project_id, name):
     project_dir = pathlib.Path(PROJECTS_DIR) / project_id
     (project_dir / 'frames').mkdir(parents=True, exist_ok=True)
+    (project_dir / 'timeline').mkdir(parents=True, exist_ok=True)
 
-    scenes_frames = get_scenes_frames(f'{PROJECTS_DIR}/{project_id}/video.mp4', 4, 4, 3,
-                                      f'{PROJECTS_DIR}/{project_id}/frames')
+    scenes_frames, timeline = get_scenes_frames(f'{PROJECTS_DIR}/{project_id}/video.mp4', 4, 4, 3,
+                                                f'{PROJECTS_DIR}/{project_id}/timeline',
+                                                f'{PROJECTS_DIR}/{project_id}/frames')
 
-    description = {'id': project_id, 'name': name, 'scenes_info': []}
+    timeline = [str(BASE_URL / frame.replace(PROJECTS_DIR, 'projects')) for frame in timeline]
+    description = {'id': project_id, 'name': name, 'timeline': timeline, 'scenes_info': []}
 
     for scene_info in scenes_frames:
         description['scenes_info'].append({
             'scene': scene_info['scene'],
             'dubbing': '',
             'description': '',
-            'frame': str(BASE_URL / scene_info['frame'])})
+            'frame': str(BASE_URL / scene_info['frame'].replace(PROJECTS_DIR, 'projects'))})
 
     with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'w') as file:
         json.dump(description, file)
@@ -71,7 +74,8 @@ def generate_description(project_id, name):
 @app.post('/create_project')
 async def create_project(file: UploadFile = File(), name: str = Form()):
     projects = os.listdir(PROJECTS_DIR)
-    project_id = str(int(max(projects)) + 1)
+    project_id = str(int(max([int(project) for project in projects])) + 1)
+
     os.mkdir(f'{PROJECTS_DIR}/{project_id}/')
     with open(f'{PROJECTS_DIR}/{project_id}/video.mp4', "wb+") as file_object:
         file_object.write(file.file.read())
