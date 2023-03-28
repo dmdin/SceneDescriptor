@@ -7,7 +7,6 @@ import requests
 import enum
 
 from dotenv import load_dotenv
-
 load_dotenv()
 
 IAM_TOKEN = os.environ['IAM_TOKEN']
@@ -58,8 +57,6 @@ def text2speech(text, *_, speed=3.0, voice=Voice.Filipp, out_dir='./'):
 
 
 def setup_text2speech(*, speed, voice: Voice, out_dir='./'):
-    pathlib.Path(out_dir).mkdir(parents=True, exist_ok=True)
-
     def wrap(text: str):
         return text2speech(text, speed=speed, voice=voice, out_dir=out_dir)
     return wrap

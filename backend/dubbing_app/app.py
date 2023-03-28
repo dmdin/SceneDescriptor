@@ -1,14 +1,19 @@
+import os
 import uvicorn
 from yarl import URL
-
+import pathlib
 from pydantic import BaseModel
 from fastapi import FastAPI
 from pipeline import pipeline
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
-app.mount("/voices", StaticFiles(directory="voices"), name="voices")
+VOICE_DIR = "voices"
+pathlib.Path(VOICE_DIR).mkdir(parents=True, exist_ok=True)
+
+app.mount("/voices", StaticFiles(directory=VOICE_DIR), name="voices")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,6 +21,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 class ImageUrl(BaseModel):
     url: str
