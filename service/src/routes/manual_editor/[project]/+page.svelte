@@ -188,7 +188,6 @@
            on:mouseup={handleMouseup}>
         <div class="bg-orange-600 h-2.5" style={"width: " + (($currentTime / duration) * 100) + "%;"}></div>
       </div>
-      <TimeLine description={description} projectId={projectId}/>
     </div>
 
 
@@ -202,6 +201,8 @@
         {/each}
       </div>
     </div>
-
+    <div class="mt-3 px-4 mx-4">
+      <TimeLine description={description} projectId={projectId}/>
+    </div>
   </div>
 </div>

@@ -22,7 +22,6 @@
       display: flex;
       height: 80px;
       width: 100%;
-      margin: 20px 16px
   }
 
   #frames-wrapper img {
