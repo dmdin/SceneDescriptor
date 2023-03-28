@@ -31,5 +31,5 @@
 </script>
 
 
-<canvas bind:this={canvas} class="w-full">
+<canvas bind:this={canvas} style="width: {width}px; height: {height}px" {width} {height}>
 </canvas>

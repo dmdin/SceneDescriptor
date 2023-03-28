@@ -2,22 +2,44 @@
   import {onMount} from "svelte";
   import {CUTTER_URL} from "$lib/constants";
 
+  import WaveForm from "./WaveForm.svelte";
+
   export let projectId
   export let description
   export let videoSrc = ''
   export let audioSrc = ''
 
+  let audioCtx, source, audioData;
+  onMount(async () => {
+    audioCtx = new AudioContext();
+
+    audioData = await fetch(audioSrc)
+      .then(r => r.arrayBuffer())
+      .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+      .then(audioBuffer => audioBuffer.getChannelData(0))
+  })
+
+  let audioElement
+  let containerWidth
 </script>
+
+<audio bind:this={audioElement} hidden src={audioSrc}></audio>
+<div bind:clientWidth={containerWidth}>
 {#if description && description.timeline }
   <div id="frames-wrapper">
     {#each description.timeline as frame}
-    <img src={frame}/>
+    <img src={frame} alt="Превью"/>
   {/each}
   </div>
-
 {/if}
 
+{#if audioData}
+  <WaveForm data={audioData} width={containerWidth}/>
+{/if}
+
+</div>
 <style>
+
   #frames-wrapper {
       display: flex;
       height: 80px;

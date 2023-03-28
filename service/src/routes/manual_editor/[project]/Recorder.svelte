@@ -65,7 +65,6 @@
     mediaRecorder.stop();
     await audioCtx.close()
     clearInterval(updateInterval)
-    console.log(audioCtx)
     isRecording = false;
   }
 
@@ -97,4 +96,4 @@
 </button>
 
 
-<WaveForm data={dataArray}/>
+<WaveForm data={dataArray} width={200} height={100}/>

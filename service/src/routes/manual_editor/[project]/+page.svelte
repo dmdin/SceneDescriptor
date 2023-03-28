@@ -202,7 +202,7 @@
       </div>
     </div>
     <div class="mt-3 px-4 mx-4">
-      <TimeLine description={description} projectId={projectId}/>
+      <TimeLine description={description} projectId={projectId} audioSrc={audioUrl}/>
     </div>
   </div>
 </div>
