@@ -5,7 +5,7 @@ from yarl import URL
 import json
 import uvicorn
 from typing import List
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, Form
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,15 +46,14 @@ class VideoDescription(BaseModel):
     scenes_info: List[Frame]
 
 
-@app.post('/generate_description')
-def generate_description_by_id(body: Project):
-    project_dir = pathlib.Path(PROJECTS_DIR) / body.video_id
+def generate_description(project_id, name):
+    project_dir = pathlib.Path(PROJECTS_DIR) / project_id
     (project_dir / 'frames').mkdir(parents=True, exist_ok=True)
 
-    scenes_frames = get_scenes_frames(f'{PROJECTS_DIR}/{body.video_id}/video.mp4', 4, 4, 3,
-                                      f'{PROJECTS_DIR}/{body.video_id}/frames')
+    scenes_frames = get_scenes_frames(f'{PROJECTS_DIR}/{project_id}/video.mp4', 4, 4, 3,
+                                      f'{PROJECTS_DIR}/{project_id}/frames')
 
-    description = {'id': body.video_id, 'name': body.name, 'scenes_info': []}
+    description = {'id': project_id, 'name': name, 'scenes_info': []}
 
     for scene_info in scenes_frames:
         description['scenes_info'].append({
@@ -63,8 +62,21 @@ def generate_description_by_id(body: Project):
             'description': '',
             'frame': str(BASE_URL / scene_info['frame'])})
 
-    with open(f'{PROJECTS_DIR}/{body.video_id}/description.json', 'w') as file:
+    with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'w') as file:
         json.dump(description, file)
+
+    return description
+
+
+@app.post('/create_project')
+async def create_project(file: UploadFile = File(), name: str = Form()):
+    projects = os.listdir(PROJECTS_DIR)
+    project_id = str(int(max(projects)) + 1)
+    os.mkdir(f'{PROJECTS_DIR}/{project_id}/')
+    with open(f'{PROJECTS_DIR}/{project_id}/video.mp4', "wb+") as file_object:
+        file_object.write(file.file.read())
+
+    description = generate_description(project_id, name)
 
     return description
 
