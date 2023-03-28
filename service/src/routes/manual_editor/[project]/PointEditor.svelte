@@ -11,11 +11,11 @@
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
   <div class="flex flex-col">
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
-      <p class="mr-1 my-2">Время отметки:</p>
+      <p class="mr-1 my-2">Время маркера:</p>
       <p>1:18 / 4:50</p>
     </div>
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
-      <p class="mr-1 my-2">Текст отметки:</p>
+      <p class="mr-1 my-2">Текст маркера:</p>
       <button title="Сгенерировать текст" class="transition transition-color hover:text-yellow-400">
         <Bolt size="20"/>
       </button>
@@ -47,7 +47,7 @@
   </div>
   <hr class="border-gray-800 mt-2">
   <div class="w-full text-gray-500 text-sm flex justify-between items-end flex-1">
-    <p class="mr-1 my-2">Удалить отметку:</p>
+    <p class="mr-1 my-2">Удалить маркер:</p>
     <button title="Сгенерировать текст" class="transition transition-color hover:text-red-600 ">
       <Trash size="20"/>
     </button>

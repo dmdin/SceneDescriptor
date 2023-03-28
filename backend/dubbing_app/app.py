@@ -4,7 +4,7 @@ from yarl import URL
 import pathlib
 from pydantic import BaseModel
 from fastapi import FastAPI
-from pipeline import pipeline
+from pipeline import pipeline_img2spch, pipeline_img2txt, pipeline_txt2spch
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -31,12 +31,29 @@ class VoicePath(BaseModel):
     url: str
 
 
+class Text(BaseModel):
+    text: str
+
+
 BASE_URL = URL('http://localhost:8000')
 
 
-@app.post('/image_to_voice', response_model=VoicePath)
+@app.post('/image2speech', response_model=VoicePath)
 def synth_voice_by_image(body: ImageUrl):
-    voice_path = pipeline(img_url=body.url)
+    voice_path = pipeline_img2spch(img_url=body.url)
+    voice_url = BASE_URL / voice_path.as_posix()
+    return VoicePath(url=str(voice_url))
+
+
+@app.post('/image2text', response_model=Text)
+def synth_text_by_image(body: ImageUrl):
+    text = pipeline_img2txt(img_url=body.url)
+    return Text(text=text)
+
+
+@app.post('/text2speech', response_model=VoicePath)
+def synth_voice_by_text(body: Text):
+    voice_path = pipeline_txt2spch(ru_text=body.text)
     voice_url = BASE_URL / voice_path.as_posix()
     return VoicePath(url=str(voice_url))
 

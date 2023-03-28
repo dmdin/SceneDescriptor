@@ -21,11 +21,6 @@
 <!--    <p>{JSON.stringify(projects)}</p>-->
     {#each projects as project}
       <ProjectCard {...project}/>
-      <ProjectCard {...project}/>
-      <ProjectCard {...project}/>
-      <ProjectCard {...project}/>
-      <ProjectCard {...project}/>
-      <ProjectCard {...project}/>
     {/each}
   </div>
 </div>
