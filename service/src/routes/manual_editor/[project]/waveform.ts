@@ -11,13 +11,10 @@ export async function getPCM2(blob, audioCtx) {
 }
 
 // @ts-ignore
-export async function getPCM(blob, audioCtx): Promise<Float32Array> {
+export async function getPCM(blob, audioCtx, fileReader): Promise<Float32Array> {
   return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    console.log('blob is', blob)
     fileReader.onloadend = () => {
       if (fileReader.result?.byteLength === 0) return
-      console.log('load end', fileReader.result)
       const arrayBuffer = fileReader.result as ArrayBuffer;
       // Convert array buffer into audio buffer
       audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
@@ -33,8 +30,6 @@ export async function getPCM(blob, audioCtx): Promise<Float32Array> {
 
 
 export function drawPCM(values, canvas, playhead) {
-
-  console.log('draw pcm')
   const ctx = canvas.getContext('2d');
   let { width: clientWidth, height: clientHeight } = canvas;
   canvas.width = clientWidth;

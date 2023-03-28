@@ -6,25 +6,26 @@
   export let height = 200;
   export let playhead;
 
-  export let audioChunks;
-  export let stream;
+  export let data;
 
-  let pcm, audioCtx
+  // let pcm, audioCtx
 
-  onMount(() => {
-    audioCtx = new AudioContext()
-  })
+  $: if (data && canvas) drawPCM(data, canvas, playhead)
 
+
+  /*
   audioChunks.subscribe(
     async (v) => {
+      console.log(v)
       const currentBlob = new Blob(v, {
         'type': 'audio/webm; codecs=opus'
       })
-      pcm = await getPCM(currentBlob, audioCtx)
-      console.log(pcm)
+      const fileReader = new FileReader();
+      pcm = await getPCM(currentBlob, audioCtx, fileReader)
       drawPCM(pcm, canvas, playhead)
     }
   )
+  */
 
   let canvas
 </script>

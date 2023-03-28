@@ -15,26 +15,22 @@
   let blob: any;
 
 
-  let pcm, audioCtx, analyser, source, dataArray
-  onMount(async () => {
-      audioCtx = new AudioContext();
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 2048;
-      const bufferLength = analyser.frequencyBinCount;
-      dataArray = new Float32Array(bufferLength);
-  })
-
-  function loop() {
-    analyser.getByteTimeDomainData(dataArray)
-    console.log(dataArray)
-  }
+  let pcm, audioCtx, analyser, source, dataArray, updateInterval
 
   function startRecording() {
     isRecording = true;
+
+    audioCtx = new AudioContext();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Float32Array(bufferLength);
+
     navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
       // Web Audio
       source = audioCtx.createMediaStreamSource(stream);
       source.connect(analyser)
+
       mediaRecorder = new MediaRecorder(stream);
 
       $voice = [];
@@ -51,15 +47,25 @@
         dispatch('recorded', blob)
         console.log("Stop recording");
       });
+
+      updateInterval = setInterval(() => {
+        analyser.getFloatTimeDomainData(dataArray)
+        dataArray = dataArray
+      }, 100)
+
     }).catch(error => {
-      console.log('Ошибка!')
+      console.log(error)
       // alert("Для записи звука необходимо дать разрешение")
       // location.reload()
     })
+
   }
 
-  function stopRecording() {
+  async function stopRecording() {
     mediaRecorder.stop();
+    await audioCtx.close()
+    clearInterval(updateInterval)
+    console.log(audioCtx)
     isRecording = false;
   }
 
@@ -91,4 +97,4 @@
 </button>
 
 
-<WaveForm audioChunks={voice}/>
+<WaveForm data={dataArray}/>
