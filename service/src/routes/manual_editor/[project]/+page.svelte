@@ -4,6 +4,7 @@
   import {page} from '$app/stores';
   import {CUTTER_URL} from "$lib/constants";
   import PointEditor from "./PointEditor.svelte";
+  import Gallery from "./Gallery.svelte";
   import {Play, Pause, Microphone, Bookmark, Bolt} from 'svelte-heros-v2'
 
   const wavesurfer: any = writable()
@@ -175,10 +176,14 @@
 <audio hidden id="hid_audio" src='' controls></audio>
 <div class="h-screen">
   <div class="flex p-5 gap-3 h-fit">
-    <div class="flex flex-col flex-1 border border-gray-800 items-center shadow-xl rounded-md p-2 h-full">
-      <div>
-      <video class="p-2"
-             style="object-fit:contain; max-height: 20rem;"
+    <div class="flex-initial grow-0 ">
+      <Gallery />
+    </div>
+    <div class="flex-1 flex flex-col  border border-gray-800 items-center shadow-xl rounded-md p-2 h-full">
+      <h1 class="text-gray-400 text-xl font-bold">{description?.name}</h1>
+      <div class="w-full">
+      <video class="p-2 w-full"
+             style="object-fit:contain; max-height: 500px;"
              bind:currentTime={time_now}
              bind:duration
              bind:paused

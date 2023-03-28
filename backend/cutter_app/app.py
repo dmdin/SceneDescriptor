@@ -111,6 +111,7 @@ def get_all_projects():
 
         res.append({
             'name': description['name'],
+            'id': description['id'],
             'video': str(project_url / 'video.mp4'),
             'description': str(project_url / 'description.json'),
             'preview': str(project_url / 'frames' / 'frame_0.jpg'),

@@ -5,7 +5,7 @@
 </script>
 
 <div class="bg-gray-900">
-	<Header />
+<!--	<Header />-->
 
 	<main>
 		<slot />

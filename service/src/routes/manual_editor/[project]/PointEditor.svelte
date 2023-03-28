@@ -7,7 +7,7 @@
 </script>
 
 
-<div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full">
+<div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full max-w-[260px]">
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
   <div class="flex flex-col">
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">

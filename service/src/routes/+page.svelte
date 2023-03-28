@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ProjectCard from './components/ProjectCard.svelte'
+  import ProjectCard from '$lib/components/ProjectCard.svelte'
   import {CUTTER_URL} from "$lib/constants";
   import {onMount} from "svelte";
 
@@ -17,8 +17,8 @@
 <div class="flex flex-col items-center w-full h-screen">
   <h1 class="text-4xl font-black text-gray-500 text-center mt-20">Выбор проекта</h1>
 
-  <div class="bg-gray-900  grid grid-cols-2 gap-5 place-items-center mt-10">
-  <!--  <p>{JSON.stringify(projects)}</p>-->
+  <div class="bg-gray-900 w-4/5 grid grid-cols-2 gap-5 place-items-center mt-10 max-w-5xl">
+<!--    <p>{JSON.stringify(projects)}</p>-->
     {#each projects as project}
       <ProjectCard {...project}/>
       <ProjectCard {...project}/>
