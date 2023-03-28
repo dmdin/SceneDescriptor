@@ -4,7 +4,7 @@
   import {page} from '$app/stores';
   import {CUTTER_URL} from "$lib/constants";
   import PointEditor from "./PointEditor.svelte";
-  import {Play, Pause, Microphone, Bookmark} from 'svelte-heros-v2'
+  import {Play, Pause, Microphone, Bookmark, Bolt} from 'svelte-heros-v2'
 
   const wavesurfer: any = writable()
   let WaveSurfer: any;
@@ -172,11 +172,11 @@
 </script>
 
 
-<p class="text-white">{videoUrl}</p>
 <audio hidden id="hid_audio" src='' controls></audio>
 <div class="h-screen">
-  <div class="flex justify-between">
-    <div class="bg-gray-800 flex flex-col items-center shadow-xl rounded-md p-2">
+  <div class="flex p-5 gap-3 h-fit">
+    <div class="flex flex-col flex-1 border border-gray-800 items-center shadow-xl rounded-md p-2 h-full">
+      <div>
       <video class="p-2"
              style="object-fit:contain; max-height: 20rem;"
              bind:currentTime={time_now}
@@ -186,36 +186,41 @@
         <source src={videoUrl}>
         <track kind="captions">
       </video>
-      <div class="flex justify-between w-full px-4">
-        <div class="flex gap-2">
-          <button class="text-gray-300 transition transition-color hover:text-orange-600"
-                  class:text-orange-500={paused}
-                  on:click={() => {paused=true}}>
-            <Pause variation="solid"/>
-          </button>
-          <button class="text-gray-300 transition transition-color hover:text-orange-600"
-                  class:text-orange-500={!paused}
-                  on:click={() => {paused=false}}>
-            <Play variation="solid"/>
-          </button>
-          <button class="text-gray-300 transition transition-color hover:text-orange-600"
-                  on:click={() => new_point(time_now)}>
-            <Bookmark variation="solid" size="20"/>
-          </button>
+        <div class="flex justify-between w-full px-4">
+          <div class="flex gap-2">
+            <button class="text-gray-600 transition transition-color hover:text-orange-600"
+                    class:text-orange-500={paused}
+                    on:click={() => {paused=true}}>
+              <Pause variation="solid"/>
+            </button>
+            <button class="text-gray-600 transition transition-color hover:text-orange-600"
+                    class:text-orange-500={!paused}
+                    on:click={() => {paused=false}}>
+              <Play/>
+            </button>
+            <button class="text-gray-600 transition transition-color hover:text-sky-500"
+                    on:click={() => new_point(time_now)}>
+              <Bookmark variation="" size="20"/>
+            </button>
+            <button
+              title="Сгенерировать маркеры"
+              class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3"
+            >
+              <Bolt size="20"/>
+            </button>
+          </div>
+          <p class="text-center my-1 text-gray-400">{format(time_now)} / {format(duration)}</p>
         </div>
-        <p class="text-center my-1 text-gray-400">{format(time_now)} / {format(duration)}</p>
       </div>
     </div>
-    <div class="p-2 flex flex-col shadow-xl rounded-lg">
-      <div class="flex">
-
+<!--      <div class="flex">-->
         <!-- <button on:click={create_audio} class="btn-blue mx-1 my-1">сгенерить аудио</button> -->
+<!--      </div>-->
 
-      </div>
-
-      <button class="btn-blue mt-1" on:click={start_video}>Запустить видео с заметками</button>
-
-      <PointEditor/>
+<!--      <button class="btn-blue mt-1" on:click={start_video}>Запустить видео с заметками</button>-->
+    <div class="flex-initial">
+      <PointEditor />
+    </div>
       <!--{#if point_voc[time_now - (time_now % 1)]}-->
       <!--  <div class="border mt-2 p-1 rounded-lg flex flex-col">-->
       <!--    <p class="text-xs text-gray-400 text-center">Редактирование маркера</p>-->
@@ -255,7 +260,6 @@
       <!--{:else}-->
       <!--  <button on:click={() => new_point(time_now)} class="btn-blue mt-2 mx-auto">Создать отметку(?)</button>-->
       <!--{/if}-->
-    </div>
   </div>
 
 
@@ -275,7 +279,7 @@
         {#each point_list as point}
           <button class="absolute cursor-pointer" on:click={() => time_now = point}
                style={"left: calc(" + ((point / duration) * 100) + "% - 8px);"}>
-            <Bookmark size="15" class="text-orange-800" variation="solid"/>
+            <Bookmark size="15" class="text-sky-500"/>
           </button>
         {/each}
       </div>
