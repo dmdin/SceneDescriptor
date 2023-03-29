@@ -1,0 +1,81 @@
+{
+  "id": "11",
+  "name": "Титаник",
+  "timeline": [
+    "http://84.201.168.130:8001/projects/11/timeline/frame_1.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_2.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_3.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_4.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_5.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_6.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_7.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_8.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_9.jpg",
+    "http://84.201.168.130:8001/projects/11/timeline/frame_10.jpg"
+  ],
+  "scenes_info": [
+    {
+      "scene": [
+        14.982,
+        20.687
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_0.jpg"
+    },
+    {
+      "scene": [
+        33.433,
+        37.671
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_1.jpg"
+    },
+    {
+      "scene": [
+        71.98031250000001,
+        75.208
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_2.jpg"
+    },
+    {
+      "scene": [
+        75.208,
+        84.46781250000001
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_3.jpg"
+    },
+    {
+      "scene": [
+        85.3621875,
+        88.455
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_4.jpg"
+    },
+    {
+      "scene": [
+        95.60531250000001,
+        108.342
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_5.jpg"
+    },
+    {
+      "scene": [
+        108.342,
+        119.19656250000001
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/11/frames/frame_6.jpg"
+    }
+  ]
+}

@@ -9,7 +9,7 @@ services:
       - 80:3000
     depends_on:
       - cutter
-      -
+      - dubbing
 
   dubbing:
     restart: unless-stopped

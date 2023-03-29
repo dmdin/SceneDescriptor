@@ -1,1 +1,128 @@
-{"id": "9", "name": "\u041c\u0430\u0442\u0440\u0438\u0446\u0430", "scenes_info": [{"scene": [29.8, 34.0453125], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_0.jpg"}, {"scene": [64.64, 74], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_1.jpg"}, {"scene": [93.36, 97.64], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_2.jpg"}, {"scene": [100.16, 103.40156250000001], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_3.jpg"}, {"scene": [139.64, 143.96], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_4.jpg"}, {"scene": [152.28, 155.2921875], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_5.jpg"}, {"scene": [181.08, 207.56], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_6.jpg"}, {"scene": [209.16, 212.81906250000003], "dubbing": "", "description": "", "frame": "https://67c4-5-19-96-171.ngrok.io/projects/9/frames/frame_7.jpg"}], "final_points": [{"name": "", "text": "", "audio_blob": null, "start": 29}, {"name": "", "text": "", "audio_blob": null, "start": 64}, {"name": "", "text": "", "audio_blob": null, "start": 93}, {"name": "", "text": "", "audio_blob": null, "start": 100}, {"name": "", "text": "", "audio_blob": null, "start": 139}, {"name": "", "text": "", "audio_blob": null, "start": 152}, {"name": "", "text": "", "audio_blob": null, "start": 181}, {"name": "", "text": "\u041f\u0440\u0438\u0432\u0435\u0442", "audio_blob": "http://localhost:8000/voices/1680093174369.mp3", "start": 209}]}
+{
+  "id": "9",
+  "name": "Матрица",
+  "scenes_info": [
+    {
+      "scene": [
+        29.8,
+        34.0453125
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_0.jpg"
+    },
+    {
+      "scene": [
+        64.64,
+        74
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_1.jpg"
+    },
+    {
+      "scene": [
+        93.36,
+        97.64
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_2.jpg"
+    },
+    {
+      "scene": [
+        100.16,
+        103.40156250000001
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_3.jpg"
+    },
+    {
+      "scene": [
+        139.64,
+        143.96
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_4.jpg"
+    },
+    {
+      "scene": [
+        152.28,
+        155.2921875
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_5.jpg"
+    },
+    {
+      "scene": [
+        181.08,
+        207.56
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_6.jpg"
+    },
+    {
+      "scene": [
+        209.16,
+        212.81906250000003
+      ],
+      "dubbing": "",
+      "description": "",
+      "frame": "http://84.201.168.130:8001/projects/9/frames/frame_7.jpg"
+    }
+  ],
+  "final_points": [
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 29
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 64
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 93
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 100
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 139
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 152
+    },
+    {
+      "name": "",
+      "text": "",
+      "audio_blob": null,
+      "start": 181
+    },
+    {
+      "name": "",
+      "text": "\u041f\u0440\u0438\u0432\u0435\u0442",
+      "audio_blob": "http://84.201.168.130:8000/voices/1680093174369.mp3",
+      "start": 209
+    }
+  ]
+}

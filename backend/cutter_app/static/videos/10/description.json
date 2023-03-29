@@ -2,16 +2,16 @@
   "id": "10",
   "name": "Бешеные псы",
   "timeline": [
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_1.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_2.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_3.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_4.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_5.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_6.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_7.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_8.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_9.jpg",
-    "https://67c4-5-19-96-171.ngrok.io/projects/10/timeline/frame_10.jpg"
+    "http://84.201.168.130:8001/projects/10/timeline/frame_1.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_2.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_3.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_4.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_5.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_6.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_7.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_8.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_9.jpg",
+    "http://84.201.168.130:8001/projects/10/timeline/frame_10.jpg"
   ],
   "scenes_info": [
     {
@@ -21,7 +21,7 @@
       ],
       "dubbing": "",
       "description": "",
-      "frame": "https://67c4-5-19-96-171.ngrok.io/projects/10/frames/frame_0.jpg"
+      "frame": "http://84.201.168.130:8001/projects/10/frames/frame_0.jpg"
     }
   ]
 }
