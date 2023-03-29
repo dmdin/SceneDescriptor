@@ -115,6 +115,8 @@
     $currentTime = 0;
     paused = false;
     new_list = {};
+    console.log(point_voc);
+    
   }
 
   let for_audio_checked;
@@ -125,11 +127,13 @@
   function check_audio(time: any) {
     let time_sec = time - (time % 1);
     if (point_voc[time_sec] !== undefined && !new_list[time_sec]) {
-      console.log("Запуск аудиозаписи " + time_sec);
-      new_list[time_sec] = true
       if (state_show_video) {
-        audio.src = URL.createObjectURL(point_voc[time_sec].audio_blob);
-        audio.play();
+        console.log("Запуск аудиозаписи " + time_sec);
+        new_list[time_sec] = true
+        if(point_voc[time_sec].audio_blob !== null){
+          document.getElementById("hid_audio").src = point_voc[time_sec].audio_blob;
+          document.getElementById("hid_audio").play();
+        }
       }
     }
   }
@@ -165,7 +169,8 @@
   let audio
 </script>
 
-<audio hidden bind:this={audio} src='' controls></audio>
+<audio hidden id="hid_audio" src='' controls></audio>
+
 <div class="min-h-screen">
   <div class="flex p-5 gap-3 h-fit">
     <div class="flex-initial grow-0 ">
@@ -187,7 +192,7 @@
           <div class="flex gap-2">
             <button class="text-gray-600 transition transition-color hover:text-orange-600"
                     class:text-orange-500={paused}
-                    on:click={() => {paused=true}}>
+                    on:click={() => {paused=true; state_show_video = false;}}>
               <Pause variation="solid"/>
             </button>
             <button class="text-gray-600 transition transition-color hover:text-orange-600"
@@ -212,6 +217,13 @@
               on:click={generatePoints}
             >
               <Bolt size="20"/>
+            </button>
+            <button
+              title="Запуск видео с озвучкой"
+              class="transition transition-color text-gray-600 hover:text-yellow-400 ml-1"
+              on:click={start_video}
+            >
+              <Play size="20"/>
             </button>
             <button class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3" on:click={saveProject}>
               Сохранить проект
