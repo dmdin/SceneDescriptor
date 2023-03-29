@@ -30,3 +30,7 @@ https://user-images.githubusercontent.com/16957648/228559871-446a80dc-0b28-46e9-
 ## 🤖 Архитектура API
 
 ![Scene Detector API Architecture](https://user-images.githubusercontent.com/16957648/228568636-7d3211f9-cb50-45fe-9d3a-8ce7a9d0d8db.png)
+
+# Бизнес-концепция
+
+[![Download zip](https://custom-icon-badges.herokuapp.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://github.com/Dikower/SceneDescriptor/files/11102333/Finch.Peach.pdf)
