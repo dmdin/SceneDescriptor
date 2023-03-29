@@ -4,8 +4,10 @@
 
   import WaveForm from "./WaveForm.svelte";
 
+  let lastMouseDown
   let timestamps = []
 
+  export let paused
   export let description
   export let duration
   export let audioSrc = ''
@@ -26,6 +28,26 @@
       return date.toISOString().substring(11, 19);
   }
 
+  function handleMousedown(e) {
+    lastMouseDown = new Date();
+  }
+
+  function handleMouseup(e) {
+    if (new Date() - lastMouseDown < 300) {
+      if (paused) e.target.play();
+      else e.target.pause();
+    }
+  }
+
+  function handleMove(e) {
+    if (!duration) return; // video not loaded yet
+    if (e.type !== 'touchmove' && !(e.buttons & 1)) return;
+
+    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    const {left, right} = this.offsetParent.getBoundingClientRect();
+    $currentTime = duration * (clientX - left) / (right - left);
+  }
+
   $: {
       timestamps = []
       let width = containerWidth / duration * 60
@@ -43,7 +65,7 @@
 </script>
 
 <audio bind:this={audioElement} hidden src={audioSrc}></audio>
-<div bind:clientWidth={containerWidth} style="min-height: 200px">
+<div bind:clientWidth={containerWidth} class="mb-3" style="min-height: 200px">
   <div id="timestamps-wrapper">
     {#each timestamps as timestamp, time}
     <div class="timestamp" style="width: {timestamp}px">
@@ -51,8 +73,19 @@
     </div>
   {/each}
   </div>
-  <div id="tracker">
-
+  <div id="tracker-wrapper"
+       on:mousemove={handleMove}
+       on:touchmove|preventDefault={handleMove}
+       on:mousedown={handleMousedown}
+       on:mouseup={handleMouseup}>
+    <div id="tracker" style="left: calc({$currentTime / duration * 100}% - 5px);">
+      <svg width="10px" height="100%">
+        <polygon points="0, 0 5, 10 10, 0"
+          fill="#e36a18" stroke-width="0"
+        />
+        <line x1="5" y1="0" x2="5" y2="100%" stroke="#e36a18" stroke-width="2"/>
+      </svg>
+    </div>
   </div>
   {#if description && description.timeline }
     <div id="frames-wrapper" class="pt-8">
@@ -96,12 +129,20 @@
       z-index: 9;
   }
 
-  #tracker {
+  #tracker-wrapper {
       position: absolute;
-      left: 150px;
       height: 100%;
-      min-width: 3px;
-      background-color: #e36a18;
+      width: 100%;
       z-index: 1000;
+  }
+
+  #tracker {
+      height: 100%;
+      width: 10px;
+      position: absolute;
+  }
+
+  #tracker:hover {
+      cursor: ew-resize;
   }
 </style>
