@@ -22,7 +22,7 @@
 	<meta name="description" content="Video Editor" />
 </svelte:head>
 
-<div class="flex flex-col items-center w-full h-screen">
+<div class="flex flex-col items-center w-full min-h-screen">
   <h1 class="text-4xl font-black text-gray-500 text-center mt-20">Выбор проекта</h1>
 
   <div class="bg-gray-900 w-4/5 grid grid-cols-2 gap-5 place-items-center mt-10 max-w-5xl">
@@ -31,7 +31,9 @@
     {/each}
   </div>
 
-  <Uploader on:success_creation={getProjects}/>
+  <div class="mb-10">
+    <Uploader on:success_creation={getProjects}/>
+  </div>
   
 </div>
 

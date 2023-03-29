@@ -67,7 +67,7 @@
       </label>
     </div>
   {:else}
-    <div class="w-80 flex flex-col shadow-xl p-2 rounded-xl m-auto mt-20 border-2 border-gray-500"> 
+    <div class="w-80 flex flex-col shadow-xl p-2 rounded-xl m-auto mt-20 border-2 border-gray-500">
       {#if !saving_state}
       <input class="bg-gray-900 text-center text-gray-500 focus:outline-none rounded-xl p-1" type="text" bind:value={new_project_name} placeholder="Введите имя проекта..." name="" id="">
       <video loop style=" 
