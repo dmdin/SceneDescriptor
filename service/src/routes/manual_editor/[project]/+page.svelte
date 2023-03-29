@@ -208,7 +208,7 @@
       </div>
     </div>
     <div class="mt-3 mx-8">
-      <TimeLine description={description} projectId={projectId} audioSrc={audioUrl}/>
+      <TimeLine description={description} duration={duration} audioSrc={audioUrl}/>
     </div>
   </div>
 </div>
