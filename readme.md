@@ -14,6 +14,7 @@
 * [🚀 Get started](https://github.com/Dikower/SceneDescriptor/edit/master/readme.md#-get-started)
 * [🐳 Запуск с помощью докера](https://github.com/Dikower/SceneDescriptor/edit/master/readme.md#-запуск-с-помощью-докера)
 * [🖼️ Гайд по интерфейсу](https://github.com/Dikower/SceneDescriptor/edit/master/readme.md#%EF%B8%8F-интерфейс-решения)
+* [🤖 Архитектура API](https://github.com/Dikower/SceneDescriptor/edit/master/readme.md#-архитектура-api)
 
 ## 🚀 Get started
 Установите зависимости
@@ -39,3 +40,6 @@ docker-compose up --build
 
 https://user-images.githubusercontent.com/16957648/228559871-446a80dc-0b28-46e9-bcea-c5abc9d9d3cd.mp4
 
+## 🤖 Архитектура API
+
+![Scene Detector API Architecture](https://user-images.githubusercontent.com/16957648/228568636-7d3211f9-cb50-45fe-9d3a-8ce7a9d0d8db.png)
