@@ -7,6 +7,7 @@ import uvicorn
 from typing import List
 from fastapi import FastAPI, File, UploadFile, Form
 from pydantic import BaseModel
+from pydantic.typing import Any
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -42,9 +43,11 @@ class Frame(BaseModel):
 class VideoDescription(BaseModel):
     id: str
     name: str
-    scenes_info: List[Frame]
+    scenes_info: List
+    final_points: List
 
 
+# class FinalProject
 def generate_description(project_id, name):
     project_dir = pathlib.Path(PROJECTS_DIR) / project_id
     (project_dir / 'frames').mkdir(parents=True, exist_ok=True)
@@ -121,6 +124,10 @@ def get_all_projects():
             'audio': str(project_url / 'video.wav')
         })
     return res
+
+# @app.post('/save_project/{project_id}')
+# def save_project():
+
 
 
 if __name__ == '__main__':

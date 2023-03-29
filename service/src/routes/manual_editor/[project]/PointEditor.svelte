@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {onMount} from "svelte";
   import {Trash, Microphone, Stop, Bolt, Play, Pause} from 'svelte-heros-v2'
   import Recorder from "./Recorder.svelte";
   import GeneratedVoice from "./GeneratedVoice.svelte";
@@ -10,10 +11,7 @@
   import {Circle} from "svelte-loading-spinners";
 
   export let time
-  export let pointData;
-  export let markerText = ''  // Текст маркера
-  export let voiceUrl;   // Запись звука, либо Сгенерированное; извлекаем через bind:
-
+  export let pointData = {}
 
   let isGeneratedVoice = false;
   let isGeneratingText = false, isGeneratingVoice = false
@@ -38,7 +36,7 @@
       }
     ).then(r => r.json()).then(r => r.url)
 
-    markerText = await fetch(
+    pointData[time].text = await fetch(
       new URL('/image2text', DUBBING_URL),
       {
         method: 'POST',
@@ -50,16 +48,16 @@
   }
 
   async function generateVoice() {
-    if (!markerText) return
+    if (!pointData[time].text) return
     if (isGeneratingVoice) return
 
     isGeneratingVoice = true
-    voiceUrl = await fetch(
+    pointData[time].audio_blob = await fetch(
       new URL('/text2speech', DUBBING_URL),
       {
         method: 'POST',
         headers: {"Content-Type": "application/json; charset=utf-8"},
-        body: JSON.stringify({text: markerText})
+        body: JSON.stringify({text: pointData[time].text})
       }
     ).then(r => r.json()).then(r => r.url)
     isGeneratingVoice = false
@@ -72,7 +70,7 @@
     data.append('file', file)
     isGeneratedVoice = false
 
-    voiceUrl = await fetch(
+    pointData[time].audio_blob = await fetch(
       new URL('/upload_voice', DUBBING_URL),
       {
         method: 'POST',
@@ -80,14 +78,22 @@
       }
     ).then(r => r.json()).then(r => r.url)
 
+
+    console.log(isGeneratedVoice)
+    console.log(pointData[time].audio_blob)
   }
 
   function clearAudio() {
-    isGeneratedVoice = false
-    voiceUrl = ''
+    pointData[time].audio_blob = ''
   }
   function deleteMarker() {
     dispatch("delete")
+  }
+
+  function secToTime(secs) {
+      let date = new Date(0)
+      date.setSeconds(secs)
+      return date.toISOString().substring(14, 19);
   }
 
   let canvas, img, fileInput
@@ -102,7 +108,7 @@
   <div class="flex flex-col">
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Время маркера:</p>
-      <p>1:18 / 4:50</p>
+      <p>{secToTime(time)}</p>
     </div>
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Текст маркера:</p>
@@ -123,7 +129,7 @@
         ring-transparent
         ring-0 !outline-none
       "
-      bind:value={markerText}></textarea>
+      bind:value={pointData[time].text}></textarea>
   </div>
 
   <div class="mt-2">
@@ -139,11 +145,11 @@
         <Bolt size="20"/>
       </button>
     </div>
-    <AudioPlayer audioSrc={voiceUrl}/>
-    {#if isGeneratedVoice}
-      <GeneratedVoice audioSrc={voiceUrl}/>
+    <AudioPlayer audioSrc={pointData[time].audio_blob}/>
+    {#if isGeneratedVoice && pointData[time].audio_blob}
+      <GeneratedVoice audioSrc={pointData[time].audio_blob} {isGeneratedVoice}/>
     {:else}
-      <Recorder on:recorded={(e) => uploadVoice(e.detail)}/>
+      <Recorder audioSrc={pointData[time].audio_blob} {isGeneratedVoice} on:recorded={(e) => uploadVoice(e.detail)}/>
     {/if}
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Удалить озвучку:</p>
@@ -161,7 +167,7 @@
   <div class="w-full text-gray-500 text-sm flex justify-between items-end flex-1">
     <p class="mr-1">Удалить маркер:</p>
     <button
-      title="Сгенерировать текст" class="transition transition-color hover:text-red-600 "
+       class="transition transition-color hover:text-red-600 "
       on:click={deleteMarker}
     >
       <Trash size="20"/>

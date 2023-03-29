@@ -6,10 +6,11 @@
 
   import WaveForm from './WaveForm.svelte'
 
+  export let isGeneratedVoice
+  export let audioSrc
   const dispatch = createEventDispatcher()
   let isRecording = false;
   let mediaRecorder: any;
-
 
   let voice = writable([])
   let blob: any;
@@ -82,4 +83,7 @@
     <Microphone/>
   </button>
 {/if}
-<WaveForm data={dataArray} width={200} height={100}/>
+
+{#if audioSrc && !isGeneratedVoice}
+  <WaveForm data={dataArray} width={200} height={100}/>
+{/if}
