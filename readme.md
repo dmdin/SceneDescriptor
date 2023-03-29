@@ -22,3 +22,10 @@ npm run dev
 ```bash
 docker-compose up --build
 ```
+
+## 🖼️ Интерфейс решения
+
+Описание основных элементов интерфейса:
+
+https://user-images.githubusercontent.com/16957648/228559871-446a80dc-0b28-46e9-bcea-c5abc9d9d3cd.mp4
+
