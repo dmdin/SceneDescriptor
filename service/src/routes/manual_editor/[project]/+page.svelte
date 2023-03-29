@@ -134,7 +134,7 @@
 </script>
 
 <audio hidden id="hid_audio" src='' controls></audio>
-<div class="h-screen">
+<div class="min-h-screen">
   <div class="flex p-5 gap-3 h-fit">
     <div class="flex-initial grow-0 ">
       <Gallery/>
@@ -207,7 +207,7 @@
         {/each}
       </div>
     </div>
-    <div class="mt-3 px-4 mx-4">
+    <div class="mt-3 mx-8">
       <TimeLine description={description} projectId={projectId} audioSrc={audioUrl}/>
     </div>
   </div>
