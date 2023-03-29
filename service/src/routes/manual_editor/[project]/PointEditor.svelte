@@ -4,15 +4,25 @@
   import GeneratedVoice from "./GeneratedVoice.svelte";
   import {capture} from "./frame";
   import {DUBBING_URL, CUTTER_URL} from "$lib/constants";
+  import {createEventDispatcher} from "svelte";
+  import AudioPlayer from "./AudioPlayer.svelte";
 
-  export let description
+  import {Circle} from "svelte-loading-spinners";
+
   export let time
-
   export let pointData;
+  export let markerText = ''  // Текст маркера
+  export let voiceUrl;   // Запись звука, либо Сгенерированное; извлекаем через bind:
 
-  export let markerText = ''
+
+  let isGeneratedVoice = false;
+  let isGeneratingText = false, isGeneratingVoice = false
+
+  const dispatch = createEventDispatcher()
 
   async function generateText() {
+    if (isGeneratingText) return
+    isGeneratingText = true
     const url = capture()
     const file = await fetch(url)
       .then(res => res.blob())
@@ -36,9 +46,14 @@
         body: JSON.stringify({url: imgUrl}),
       }
     ).then(r => r.json()).then(r => r.text)
+    isGeneratingText = false
   }
 
   async function generateVoice() {
+    if (!markerText) return
+    if (isGeneratingVoice) return
+
+    isGeneratingVoice = true
     voiceUrl = await fetch(
       new URL('/text2speech', DUBBING_URL),
       {
@@ -47,9 +62,35 @@
         body: JSON.stringify({text: markerText})
       }
     ).then(r => r.json()).then(r => r.url)
+    isGeneratingVoice = false
+    isGeneratedVoice = true
   }
 
-  let canvas, img, voiceUrl, fileInput
+  async function uploadVoice(blob) {
+    const file = blob
+    const data = new FormData()
+    data.append('file', file)
+    isGeneratedVoice = false
+
+    voiceUrl = await fetch(
+      new URL('/upload_voice', DUBBING_URL),
+      {
+        method: 'POST',
+        body: data
+      }
+    ).then(r => r.json()).then(r => r.url)
+
+  }
+
+  function clearAudio() {
+    isGeneratedVoice = false
+    voiceUrl = ''
+  }
+  function deleteMarker() {
+    dispatch("delete")
+  }
+
+  let canvas, img, fileInput
 </script>
 
 <input hidden bind:this={fileInput} type="file">
@@ -66,9 +107,12 @@
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Текст маркера:</p>
       <button
-        title="Сгенерировать текст" class="transition transition-color hover:text-yellow-400"
+        title="Сгенерировать текст" class="transition transition-color hover:text-yellow-400 flex gap-2"
         on:click={generateText}
       >
+        {#if isGeneratingText}
+          <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
+        {/if}
         <Bolt size="20"/>
       </button>
     </div>
@@ -86,24 +130,40 @@
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Запись звука:</p>
       <button
-        title="Сгенерировать озвучку" class="transition transition-color hover:text-yellow-400"
+        title="Сгенерировать озвучку" class="transition transition-color hover:text-yellow-400 flex gap-1"
         on:click={generateVoice}
       >
+        {#if isGeneratingVoice}
+          <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
+        {/if}
         <Bolt size="20"/>
       </button>
     </div>
-    {#if voiceUrl}
+    <AudioPlayer audioSrc={voiceUrl}/>
+    {#if isGeneratedVoice}
       <GeneratedVoice audioSrc={voiceUrl}/>
     {:else}
-      <Recorder/>
+      <Recorder on:recorded={(e) => uploadVoice(e.detail)}/>
     {/if}
+    <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
+      <p class="mr-1 my-2">Удалить озвучку:</p>
+      <button
+        title="Удалить озвучку" class="transition transition-color hover:text-red-600"
+        on:click={clearAudio}
+      >
+        <Trash size="20"/>
+      </button>
+    </div>
   </div>
 
 
   <hr class="border-gray-800 mt-2">
   <div class="w-full text-gray-500 text-sm flex justify-between items-end flex-1">
     <p class="mr-1">Удалить маркер:</p>
-    <button title="Сгенерировать текст" class="transition transition-color hover:text-red-600 ">
+    <button
+      title="Сгенерировать текст" class="transition transition-color hover:text-red-600 "
+      on:click={deleteMarker}
+    >
       <Trash size="20"/>
     </button>
   </div>

@@ -64,7 +64,7 @@ def generate_description(project_id, name):
             'description': '',
             'frame': str(BASE_URL / scene_info['frame'].replace(PROJECTS_DIR, 'projects'))})
 
-    with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'w') as file:
+    with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'w', encoding='utf8') as file:
         json.dump(description, file)
 
     return description
@@ -86,7 +86,7 @@ async def create_project(file: UploadFile = File(), name: str = Form()):
 
 @app.get('/description/{video_id}')
 def get_description_by_id(video_id: int):
-    with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'r') as file:
+    with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'r', encoding='utf8') as file:
         data = json.load(file)
 
     return data
@@ -95,7 +95,7 @@ def get_description_by_id(video_id: int):
 @app.put('/description/{video_id}')
 def update_description(video_id: int, new_description: VideoDescription):
     print(video_id)
-    with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'w') as file:
+    with open(f'{PROJECTS_DIR}/{video_id}/description.json', 'w', encoding='utf8') as file:
         json.dump(new_description.dict(), file)
 
     return new_description
