@@ -6,7 +6,7 @@
   import PointEditor from "./PointEditor.svelte";
   import TimeLine from "./TimeLine.svelte";
   import Gallery from "./Gallery.svelte";
-  import {Play, Pause, Microphone, Bookmark, Bolt} from 'svelte-heros-v2'
+  import {Play, Pause, Microphone, Bookmark, Bolt, CloudArrowUp} from 'svelte-heros-v2'
 
   import {capture} from './frame'
   import {currentTime} from './stores'
@@ -22,13 +22,11 @@
   let descrUrl = new URL(`projects/${projectId}/description.json`, CUTTER_URL)
 
   onMount(async () => {
-    WaveSurfer = (await import('wavesurfer.js')).default;
     description = await fetch(descrUrl,
       {
-        headers: {"Content-Type": "application/json; charset=utf-8"}
+        headers: {"Content-Type": "application/json; charset=utf-8", cache: "no-store"}
       }).then(r => r.json())
-
-    console.log('fetch', description.name)
+    console.log('fetch', description)
   })
   // let point_list: any[] = ["25", "6" ];
   // let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };
@@ -82,14 +80,14 @@
   }
 
   // поинты
-  function new_point(time: any) {
+  function new_point(time: number) {
     let time_sec = time - (time % 1);
     point_voc[time_sec] = {name: "test_name", audio_blob: null};
     point_list.push(time_sec);
     point_list = point_list;
   }
 
-  function delete_point(time: any) {
+  function deleteMarker(time: any) {
     let time_sec = time - (time % 1);
     delete point_voc[time_sec];
     let new_list: any[] = [];
@@ -118,14 +116,15 @@
   $: for_audio_checked = check_audio($currentTime);
   let new_list: any = {};
 
+  // TODO режим прослушки с аудио
   function check_audio(time: any) {
     let time_sec = time - (time % 1);
     if (point_voc[time_sec] !== undefined && !new_list[time_sec]) {
       console.log("Запуск аудиозаписи " + time_sec);
       new_list[time_sec] = true
       if (state_show_video) {
-        document.getElementById("hid_audio").src = URL.createObjectURL(point_voc[time_sec].audio_blob);
-        document.getElementById("hid_audio").play();
+        audio.src = URL.createObjectURL(point_voc[time_sec].audio_blob);
+        audio.play();
       }
     }
   }
@@ -136,9 +135,15 @@
       new_point(point.scene[0])
     })
   }
+
+  async function saveProject() {
+
+  }
+
+  let audio
 </script>
 
-<audio hidden id="hid_audio" src='' controls></audio>
+<audio hidden bind:this={audio} src='' controls></audio>
 <div class="min-h-screen">
   <div class="flex p-5 gap-3 h-fit">
     <div class="flex-initial grow-0 ">
@@ -173,6 +178,13 @@
               <Bookmark variation="" size="20"/>
             </button>
             <button
+              title="Сохранить проект"
+              class="text-gray-600 transition transition-color hover:text-white"
+              on:click={saveProject}
+            >
+              <CloudArrowUp variation="" size="23"/>
+            </button>
+            <button
               title="Сгенерировать маркеры"
               class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3"
               on:click={generatePoints}
@@ -185,7 +197,7 @@
       </div>
     </div>
     <div class="flex-initial">
-      <PointEditor/>
+      <PointEditor on:delete={deleteMarker}/>
     </div>
   </div>
 

@@ -22,7 +22,7 @@
   
   export async function postProject(formData: any) {
     const response = await fetch(
-      CUTTER_URL + "create_project",
+      CUTTER_URL + "/create_project",
       { 
         method: "POST",
         headers: { 
