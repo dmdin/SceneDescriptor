@@ -29,11 +29,10 @@
     {#each projects as project}
       <ProjectCard {...project}/>
     {/each}
-  </div>
 
-  <div class="mb-10">
     <Uploader on:success_creation={getProjects}/>
   </div>
+
   
 </div>
 
