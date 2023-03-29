@@ -11,7 +11,7 @@
   export let textCls = 'text-xl'
 </script>
 
-<div class="{$$props.class} bg-gray-800 h-full flex flex-col rounded-lg shadow border-2 border-transparent transition-colors hover:border-orange-600 cursor-pointer"
+<div class="{$$props.class} bg-gray-900  h-full flex flex-col rounded-lg shadow border-2 border-gray-500 border-transparent transition-colors hover:border-orange-600 cursor-pointer"
   on:click={() => goto(`/manual_editor/${id}`)}
 >
   <img class="rounded-t-lg my-auto" src={preview} alt="Preview"/>
