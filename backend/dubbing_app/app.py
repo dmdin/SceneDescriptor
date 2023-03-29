@@ -8,10 +8,11 @@ from pipeline import pipeline_img2spch, pipeline_img2txt, pipeline_txt2spch
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-
-app = FastAPI()
 VOICE_DIR = "voices"
 IMG_DIR = "images"
+BASE_URL = URL(os.environ.get('DUBBING_URL', 'http://localhost:8000/'))
+
+app = FastAPI()
 pathlib.Path(VOICE_DIR).mkdir(parents=True, exist_ok=True)
 pathlib.Path(IMG_DIR).mkdir(parents=True, exist_ok=True)
 
@@ -37,9 +38,6 @@ class UrlPath(BaseModel):
 
 class Text(BaseModel):
     text: str
-
-
-BASE_URL = URL('http://localhost:8000')
 
 
 @app.post('/image2speech', response_model=UrlPath)

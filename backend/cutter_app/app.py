@@ -14,8 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from silent_scenes.main import get_scenes_frames
 
 PROJECTS_DIR = 'static/videos'
-BASE_URL = URL('https://67c4-5-19-96-171.ngrok.io/')
-
+BASE_URL = URL(os.environ.get('CUTTER_URL', 'http://localhost:8001/'))
 
 app = FastAPI()
 app.add_middleware(
@@ -127,7 +126,6 @@ def get_all_projects():
 
 # @app.post('/save_project/{project_id}')
 # def save_project():
-
 
 
 if __name__ == '__main__':
