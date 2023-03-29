@@ -72,12 +72,11 @@ def synth_voice_by_text(body: Text):
 @app.post('/upload_image', response_model=UrlPath)
 def upload_image(file: UploadFile = File()):
     path = pathlib.Path(IMG_DIR) / file.filename
-    print(path)
     with open(path, "wb+") as file_object:
         file_object.write(file.file.read())
 
     url = BASE_URL / path.as_posix()
-    return UrlPath(url=url)
+    return UrlPath(url=str(url))
 
 
 @app.post('/upload_voice', response_model=UrlPath)
@@ -87,7 +86,7 @@ def upload_voice(file: UploadFile = File()):
         file_object.write(file.file.read())
 
     url = BASE_URL / path.as_posix()
-    return UrlPath(url=url)
+    return UrlPath(url=str(url))
 
 
 if __name__ == '__main__':
