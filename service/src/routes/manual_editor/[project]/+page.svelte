@@ -26,6 +26,10 @@
       {
         headers: {"Content-Type": "application/json; charset=utf-8", cache: "no-store"}
       }).then(r => r.json())
+    description.final_points.forEach(point => {
+      console.log(point)
+      new_point(point)
+    })
     console.log('fetch', description)
   })
   // let point_list: any[] = ["25", "6" ];
@@ -81,9 +85,16 @@
   }
 
   // поинты
-  function new_point(time: number) {
+  function new_point(point) {
+    console.log(point)
+    let time
+    if (point.scene) {
+        time = point.scene[0]
+    } else {
+        time = point.start
+    }
     let time_sec = time - (time % 1);
-    point_voc[time_sec] = {name: '', text: '', audio_blob: null};
+    point_voc[time_sec] = {name: '', text: point.text || '', audio_blob: point.audio_blob || ''};
     point_list.push(time_sec);
     point_list = point_list;
   }
@@ -137,7 +148,7 @@
   async function generatePoints() {
     let newPoints = await fetch(new URL(`/description/${projectId}`, CUTTER_URL)).then(r => r.json())
     newPoints.scenes_info.forEach(point => {
-      new_point(point.scene[0])
+      new_point(point)
     })
   }
 
