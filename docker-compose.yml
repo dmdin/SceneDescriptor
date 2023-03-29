@@ -1,0 +1,47 @@
+services:
+  editor:
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: ./service
+    ports:
+      - 3000:3000
+    depends_on:
+      - cutter
+      -
+
+  dubbing:
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: ./backend/dubbing_app
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+
+  cutter:
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: ./backend/cutter_app
+    ports:
+      - 8001:8001
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    restart: always
+    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - default
+    ports:
+      - 6379:6379
+    volumes:
+      - /tmp/appdata/redis/data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
