@@ -1,16 +1,4 @@
 services:
-  editor:
-    restart: unless-stopped
-    env_file:
-      - .env
-    build:
-      context: ./service
-    ports:
-      - 80:3000
-    depends_on:
-      - cutter
-      -
-
   dubbing:
     restart: unless-stopped
     env_file:
@@ -32,6 +20,18 @@ services:
       - 8001:8001
     depends_on:
       - redis
+
+  editor:
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: ./service
+    ports:
+      - 80:3000
+    depends_on:
+      - cutter
+      - dubbing
 
   redis:
     image: redis:latest
