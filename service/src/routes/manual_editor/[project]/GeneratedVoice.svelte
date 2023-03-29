@@ -2,7 +2,8 @@
   import {onMount} from "svelte";
   import WaveForm from "./WaveForm.svelte";
 
-  export let audioSrc = 'http://localhost:8000/voices/1680048398029.mp3'
+  export let audioSrc
+  export let isGeneratedVoice
 
   let isPlaying = false
   let audioCtx, source, audioData;
@@ -16,5 +17,6 @@
   })
 
 </script>
-
+{#if audioSrc && isGeneratedVoice}
 <WaveForm data={audioData} width={200} height={100}/>
+{/if}

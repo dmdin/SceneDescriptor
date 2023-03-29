@@ -31,6 +31,7 @@
   // let point_list: any[] = ["25", "6" ];
   // let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };
 
+  let pointTime = 0
   let point_list: any[] = [];
   let point_voc: any = {};
 
@@ -82,19 +83,23 @@
   // поинты
   function new_point(time: number) {
     let time_sec = time - (time % 1);
-    point_voc[time_sec] = {name: "test_name", audio_blob: null};
+    point_voc[time_sec] = {name: '', text: '', audio_blob: null};
     point_list.push(time_sec);
     point_list = point_list;
   }
 
   function deleteMarker(time: any) {
-    let time_sec = time - (time % 1);
+    console.log('here')
+    let time_sec = pointTime - (pointTime % 1);
     delete point_voc[time_sec];
     let new_list: any[] = [];
     point_list.forEach(point => {
       if (point !== time_sec) new_list.push(point);
     })
     point_list = new_list;
+    point_list = point_list
+    console.log(point_list)
+    pointTime = 0
   }
 
   // audio
@@ -136,8 +141,25 @@
     })
   }
 
-  async function saveProject() {
+  function editPoint(time) {
+      point_voc = point_voc
+      $currentTime = time
+      pointTime = time
+      console.log(point_voc)
+  }
 
+  async function saveProject() {
+      let finalPoints = []
+      point_list.forEach(point => {
+          finalPoints.push({...point_voc[point], start: point})
+      })
+      await fetch(new URL(`/description/${projectId}/`, CUTTER_URL), {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(
+              {...description, final_points: finalPoints}
+          )
+      }).then(r => r.json())
   }
 
   let audio
@@ -191,13 +213,18 @@
             >
               <Bolt size="20"/>
             </button>
+            <button class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3" on:click={saveProject}>
+              Сохранить проект
+            </button>
           </div>
           <p class="text-center my-1 text-gray-400">{format($currentTime)} / {format(duration)}</p>
         </div>
       </div>
     </div>
     <div class="flex-initial">
-      <PointEditor on:delete={deleteMarker}/>
+      {#if point_voc[pointTime]}
+        <PointEditor time={pointTime} bind:pointData={point_voc} on:delete={deleteMarker}/>
+      {/if}
     </div>
   </div>
 
@@ -217,7 +244,7 @@
     <div class="flex px-4 mt-1 mb-4 text-lg bg-blue-100">
       <div class="flex mx-4 w-full relative bg-green-100 ">
         {#each point_list as point}
-          <button class="absolute cursor-pointer" on:click={() => $currentTime = point}
+          <button class="absolute cursor-pointer" on:click={editPoint(point)}
                   style={"left: calc(" + ((point / duration) * 100) + "% - 8px);"}>
             <Bookmark size="15" class="text-sky-500"/>
           </button>
