@@ -17,12 +17,8 @@
     const file = await fetch(url)
       .then(res => res.blob())
       .then(blob => new File([blob], `${Date.now()}.png`, {type: "image/png"}))
-    console.log(file)
     let data = new FormData()
     data.append('file', file)
-    console.log(data)
-
-
 
     const imgUrl = await fetch(
       new URL('/upload_image', DUBBING_URL),
@@ -31,7 +27,15 @@
         body: data
       }
     ).then(r => r.json()).then(r => r.url)
-    console.log(imgUrl)
+
+    markerText = await fetch(
+      new URL('/image2text', DUBBING_URL),
+      {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: imgUrl}),
+      }
+    ).then(r => r.json()).then(r => r.text)
   }
 
   async function generateVoice() {
@@ -39,7 +43,7 @@
       new URL('/text2speech', DUBBING_URL),
       {
         method: 'POST',
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json; charset=utf-8"},
         body: JSON.stringify({text: markerText})
       }
     ).then(r => r.json()).then(r => r.url)
@@ -48,7 +52,7 @@
   let canvas, img, voiceUrl, fileInput
 </script>
 
-<input bind:this={fileInput} type="file">
+<input hidden bind:this={fileInput} type="file">
 <canvas bind:this={canvas} hidden id="capture-canvas"></canvas>
 <img bind:this={img} crossorigin="anonymous"/>
 

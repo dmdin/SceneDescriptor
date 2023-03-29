@@ -16,14 +16,19 @@
 
   let projectId = $page.params.project
 
-  let description: unknown
+  let description: object
   let videoUrl = new URL(`projects/${projectId}/video.mp4`, CUTTER_URL)
   let audioUrl = new URL(`projects/${projectId}/video.wav`, CUTTER_URL)
   let descrUrl = new URL(`projects/${projectId}/description.json`, CUTTER_URL)
 
   onMount(async () => {
     WaveSurfer = (await import('wavesurfer.js')).default;
-    description = await fetch(descrUrl).then(r => r.json())
+    description = await fetch(descrUrl,
+      {
+        headers: {"Content-Type": "application/json; charset=utf-8"}
+      }).then(r => r.json())
+
+    console.log('fetch', description.name)
   })
   // let point_list: any[] = ["25", "6" ];
   // let point_voc: any = {"25": {name: "Test", audio_blob: null}, "6": {name: "Test", audio_blob: null} };
