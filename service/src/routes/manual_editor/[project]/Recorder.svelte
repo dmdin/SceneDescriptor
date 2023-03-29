@@ -14,7 +14,6 @@
   let voice = writable([])
   let blob: any;
 
-
   let pcm, audioCtx, analyser, source, dataArray, updateInterval
 
   function startRecording() {
@@ -58,7 +57,6 @@
       // alert("Для записи звука необходимо дать разрешение")
       // location.reload()
     })
-
   }
 
   async function stopRecording() {
@@ -84,16 +82,4 @@
     <Microphone/>
   </button>
 {/if}
-
-
-<button class="transition transition-color hover:text-orange-600 cursor-pointer text-gray-600"
-        on:click={() => console.log(2)}>
-  <Pause/>
-</button>
-<button class="transition transition-color hover:text-orange-600 cursor-pointer text-gray-600"
-        on:click={() => console.log(2)}>
-  <Play/>
-</button>
-
-
 <WaveForm data={dataArray} width={200} height={100}/>
