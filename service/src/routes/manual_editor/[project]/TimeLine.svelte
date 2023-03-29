@@ -42,12 +42,12 @@
 
   #frames-wrapper {
       display: flex;
-      height: 80px;
-      width: 100%;
+      /*height: 80px;*/
+      max-width: 100%;
   }
 
   #frames-wrapper img {
       height: 100%;
-      width: 100%;
+      width: calc(100% / 10);
   }
 </style>
