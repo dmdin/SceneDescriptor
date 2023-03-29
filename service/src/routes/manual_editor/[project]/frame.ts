@@ -21,6 +21,5 @@ export function capture() {
   //   };
   //
   // }
-  // console.log('draw image')
-  // return canvas.toDataURL('image/png');
+  return canvas.toDataURL('image/png');
 }

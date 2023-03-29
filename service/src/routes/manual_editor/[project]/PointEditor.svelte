@@ -1,36 +1,56 @@
 <script lang="ts">
   import {Trash, Microphone, Stop, Bolt, Play, Pause} from 'svelte-heros-v2'
   import Recorder from "./Recorder.svelte";
+  import GeneratedVoice from "./GeneratedVoice.svelte";
   import {capture} from "./frame";
+  import {DUBBING_URL, CUTTER_URL} from "$lib/constants";
 
   export let description
   export let time
 
   export let pointData;
 
+  export let markerText = ''
+
   async function generateText() {
-    const video = document.getElementById("video-main") as HTMLVideoElement;
+    const url = capture()
+    const file = await fetch(url)
+      .then(res => res.blob())
+      .then(blob => new File([blob], `${Date.now()}.png`, {type: "image/png"}))
+    console.log(file)
+    let data = new FormData()
+    data.append('file', file)
+    console.log(data)
 
-    function capture() {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext("2d")
-      if (!ctx) return
-      ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
-      img.src = canvas.toDataURL("image/png");
-    }
-    capture()
 
-    console.log(canvas.toDataURL('image/png'))
+    const imgUrl = await fetch(
+      new URL('/upload_image', DUBBING_URL),
+      {
+        method: 'POST',
+        body: data
+      }
+    ).then(r => r.json()).then(r => r.url)
+    console.log(imgUrl)
   }
 
-  let canvas, img
+  async function generateVoice() {
+    voiceUrl = await fetch(
+      new URL('/text2speech', DUBBING_URL),
+      {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text: markerText})
+      }
+    ).then(r => r.json()).then(r => r.url)
+  }
+
+  let canvas, img, voiceUrl, fileInput
 </script>
 
-
-<img bind:this={img}>
-<canvas bind:this={canvas} hidden></canvas>
+<input bind:this={fileInput} type="file">
+<canvas bind:this={canvas} hidden id="capture-canvas"></canvas>
+<img bind:this={img} crossorigin="anonymous"/>
 
 <div class="border border-gray-800 p-3 rounded-lg flex flex-col h-full max-w-[260px]">
   <p class="text-md text-gray-400 font-bold">Редактирование маркера</p>
@@ -55,19 +75,25 @@
         ring-transparent
         ring-0 !outline-none
       "
-      bind:value={description}></textarea>
+      bind:value={markerText}></textarea>
   </div>
 
   <div class="mt-2">
     <div class="w-full text-gray-500 text-sm flex justify-between items-center mt-2">
       <p class="mr-1 my-2">Запись звука:</p>
-      <button title="Сгенерировать озвучку" class="transition transition-color hover:text-yellow-400">
+      <button
+        title="Сгенерировать озвучку" class="transition transition-color hover:text-yellow-400"
+        on:click={generateVoice}
+      >
         <Bolt size="20"/>
       </button>
     </div>
-    <Recorder/>
+    {#if voiceUrl}
+      <GeneratedVoice audioSrc={voiceUrl}/>
+    {:else}
+      <Recorder/>
+    {/if}
   </div>
-
 
 
   <hr class="border-gray-800 mt-2">

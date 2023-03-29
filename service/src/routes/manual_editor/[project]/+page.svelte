@@ -121,16 +121,15 @@
       if (state_show_video) {
         document.getElementById("hid_audio").src = URL.createObjectURL(point_voc[time_sec].audio_blob);
         document.getElementById("hid_audio").play();
-
       }
     }
   }
 
   async function generatePoints() {
-      let newPoints = await fetch(new URL(`/description/${projectId}`, CUTTER_URL)).then(r => r.json())
-      newPoints.scenes_info.forEach(point => {
-          new_point(point.scene[0])
-      })
+    let newPoints = await fetch(new URL(`/description/${projectId}`, CUTTER_URL)).then(r => r.json())
+    newPoints.scenes_info.forEach(point => {
+      new_point(point.scene[0])
+    })
   }
 </script>
 
@@ -138,20 +137,20 @@
 <div class="h-screen">
   <div class="flex p-5 gap-3 h-fit">
     <div class="flex-initial grow-0 ">
-      <Gallery />
+      <Gallery/>
     </div>
     <div class="flex-1 flex flex-col  border border-gray-800 items-center shadow-xl rounded-md p-2 h-full">
       <h1 class="text-gray-400 text-xl font-bold">{description?.name}</h1>
       <div class="w-full">
-      <video class="p-2 w-full" id="video-main"
-             style="object-fit:contain; max-height: 500px;"
-             bind:currentTime={$currentTime}
-             bind:duration
-             bind:paused
-      >
-        <source src={videoUrl}>
-        <track kind="captions">
-      </video>
+        <video class="p-2 w-full" id="video-main" crossorigin="anonymous"
+               style="object-fit:contain; max-height: 500px;"
+               bind:currentTime={$currentTime}
+               bind:duration
+               bind:paused
+        >
+          <source src={videoUrl}>
+          <track kind="captions">
+        </video>
         <div class="flex justify-between w-full px-4">
           <div class="flex gap-2">
             <button class="text-gray-600 transition transition-color hover:text-orange-600"
@@ -181,7 +180,7 @@
       </div>
     </div>
     <div class="flex-initial">
-      <PointEditor />
+      <PointEditor/>
     </div>
   </div>
 
@@ -202,7 +201,7 @@
       <div class="flex mx-4 w-full relative bg-green-100 ">
         {#each point_list as point}
           <button class="absolute cursor-pointer" on:click={() => $currentTime = point}
-               style={"left: calc(" + ((point / duration) * 100) + "% - 8px);"}>
+                  style={"left: calc(" + ((point / duration) * 100) + "% - 8px);"}>
             <Bookmark size="15" class="text-sky-500"/>
           </button>
         {/each}
