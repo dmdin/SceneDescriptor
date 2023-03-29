@@ -12,9 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from silent_scenes.main import get_scenes_frames
 
-DUBBING_APP_URL = 'http://localhost:8000'
 PROJECTS_DIR = 'static/videos'
-BASE_URL = URL('http://localhost:8001')
+BASE_URL = URL('https://67c4-5-19-96-171.ngrok.io/')
 
 
 app = FastAPI()
@@ -110,7 +109,7 @@ def get_all_projects():
     for project_id in projects:
         project_url = BASE_URL / 'projects' / project_id
 
-        with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'r') as file:
+        with open(f'{PROJECTS_DIR}/{project_id}/description.json', 'r', encoding='utf8') as file:
             description = json.load(file)
 
         res.append({
