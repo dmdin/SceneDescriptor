@@ -17,19 +17,21 @@
   let projectId = $page.params.project
 
   let description: object
-  let videoUrl = new URL(`projects/${projectId}/video.mp4`, CUTTER_URL)
+  let videoUrl = new URL(`video/${projectId}`, CUTTER_URL)
   let audioUrl = new URL(`projects/${projectId}/video.wav`, CUTTER_URL)
-  let descrUrl = new URL(`projects/${projectId}/description.json`, CUTTER_URL)
+  let descrUrl = new URL(`description/${projectId}`, CUTTER_URL)
 
   onMount(async () => {
     description = await fetch(descrUrl,
       {
         headers: {"Content-Type": "application/json; charset=utf-8", cache: "no-store"}
       }).then(r => r.json())
-    description.final_points.forEach(point => {
+    if (description.final_points) {
+        description.final_points.forEach(point => {
       console.log(point)
       new_point(point)
     })
+    }
     console.log('fetch', description)
   })
   // let point_list: any[] = ["25", "6" ];
@@ -90,10 +92,12 @@
     let time
     if (point.scene) {
         time = point.scene[0]
-    } else {
+    } else if (point.start) {
         time = point.start
+    } else {
+        return
     }
-    let time_sec = time - (time % 1);
+    let time_sec = Math.ceil(time);
     point_voc[time_sec] = {name: '', text: point.text || '', audio_blob: point.audio_blob || ''};
     point_list.push(time_sec);
     point_list = point_list;
@@ -101,7 +105,7 @@
 
   function deleteMarker(time: any) {
     console.log('here')
-    let time_sec = pointTime - (pointTime % 1);
+    let time_sec = pointTime;
     delete point_voc[time_sec];
     let new_list: any[] = [];
     point_list.forEach(point => {
@@ -127,7 +131,7 @@
     paused = false;
     new_list = {};
     console.log(point_voc);
-    
+
   }
 
   let for_audio_checked;
@@ -136,7 +140,7 @@
 
   // TODO режим прослушки с аудио
   function check_audio(time: any) {
-    let time_sec = time - (time % 1);
+    let time_sec = Math.ceil(time);
     if (point_voc[time_sec] !== undefined && !new_list[time_sec]) {
       if (state_show_video) {
         console.log("Запуск аудиозаписи " + time_sec);
@@ -212,7 +216,7 @@
               <Play/>
             </button>
             <button class="text-gray-600 transition transition-color hover:text-sky-500"
-                    on:click={() => new_point($currentTime)}>
+                    on:click={() => new_point({start: $currentTime})}>
               <Bookmark variation="" size="20"/>
             </button>
             <button
@@ -235,9 +239,6 @@
               on:click={start_video}
             >
               <Play size="20"/>
-            </button>
-            <button class="transition transition-color text-gray-600 hover:text-yellow-400 ml-3" on:click={saveProject}>
-              Сохранить проект
             </button>
           </div>
           <p class="text-center my-1 text-gray-400">{format($currentTime)} / {format(duration)}</p>

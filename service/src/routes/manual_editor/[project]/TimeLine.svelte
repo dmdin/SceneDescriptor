@@ -87,7 +87,7 @@
       </svg>
     </div>
   </div>
-  {#if description && description.timeline }
+  {#if description?.timeline }
     <div id="frames-wrapper" class="pt-8">
       {#each description.timeline as frame}
       <img src={frame} alt="Превью"/>

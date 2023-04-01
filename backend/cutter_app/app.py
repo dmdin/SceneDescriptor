@@ -6,6 +6,7 @@ import json
 import uvicorn
 from typing import List
 from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pydantic.typing import Any
 from fastapi.staticfiles import StaticFiles
@@ -55,7 +56,6 @@ def generate_description(project_id, name):
     scenes_frames, timeline = get_scenes_frames(f'{PROJECTS_DIR}/{project_id}/video.mp4', 4, 4, 3,
                                                 f'{PROJECTS_DIR}/{project_id}/timeline',
                                                 f'{PROJECTS_DIR}/{project_id}/frames')
-
     timeline = [str(BASE_URL / frame.replace(PROJECTS_DIR, 'projects')) for frame in timeline]
     description = {'id': project_id, 'name': name, 'timeline': timeline, 'scenes_info': []}
 
@@ -75,7 +75,10 @@ def generate_description(project_id, name):
 @app.post('/create_project')
 async def create_project(file: UploadFile = File(), name: str = Form()):
     projects = os.listdir(PROJECTS_DIR)
-    project_id = str(int(max([int(project) for project in projects])) + 1)
+    if len(projects) == 0:
+        project_id = '0'
+    else:
+        project_id = str(int(max([int(project) for project in projects])) + 1)
 
     os.mkdir(f'{PROJECTS_DIR}/{project_id}/')
     with open(f'{PROJECTS_DIR}/{project_id}/video.mp4', "wb+") as file_object:
@@ -124,8 +127,10 @@ def get_all_projects():
         })
     return res
 
-# @app.post('/save_project/{project_id}')
-# def save_project():
+
+@app.get('/video/{project_id}/')
+async def get_video_by_id(project_id: str):
+    return FileResponse(f'./static/videos/{project_id}/video.mp4', media_type="video/mp4", headers={'Accept-Ranges': 'bytes'})
 
 
 if __name__ == '__main__':
